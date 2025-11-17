@@ -109,4 +109,9 @@ class Usuario extends Authenticatable
     {
         return $this->belongsTo(Role::class, 'role_id');
     }
+
+    public function getAuthIdentifierName()
+    {
+        return 'cpf';
+    }
 }

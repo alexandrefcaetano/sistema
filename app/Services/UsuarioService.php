@@ -101,4 +101,24 @@ class UsuarioService
     {
         return $this->repository->paginate($perPage);
     }
+
+
+    public function autenticar($cpf, $password)
+    {
+        $usuario = $this->repository->findByCPF($cpf);
+
+        if (!$usuario) {
+            return false;
+        }
+
+        if (!Hash::check($password, $usuario->password)) {
+            return false;
+        }
+
+        if ($usuario->status !== 'AT') {
+            return false;
+        }
+
+        return $usuario;
+    }
 }

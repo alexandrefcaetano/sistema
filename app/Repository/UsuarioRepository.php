@@ -109,4 +109,9 @@ class UsuarioRepository
 
         return $user;
     }
+
+    public function findByCPF($cpf)
+    {
+        return Usuario::where('cpf', $cpf)->first();
+    }
 }

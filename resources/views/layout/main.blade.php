@@ -495,7 +495,15 @@
                                     </div>
                                 </a>
                                 <div class="kt-notification__custom">
-                                    <a href="custom_user_login-v2.html" target="_blank" class="btn btn-label-brand btn-sm btn-bold">Sign Out</a>
+
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button class="btn btn-danger">Logout</button>
+                                    </form>
+
+
+
+{{--                                    <a href="custom_user_login-v2.html" target="_blank" class="btn btn-label-brand btn-sm btn-bold">Logout</a>--}}
                                 </div>
                             </div>
 
