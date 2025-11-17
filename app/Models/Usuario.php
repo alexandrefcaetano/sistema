@@ -7,6 +7,8 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Builder;
 
+use Tymon\JWTAuth\Contracts\JWTSubject;
+
 /**
  * Model responsável por representar os usuários do sistema.
  *
@@ -22,7 +24,7 @@ use Illuminate\Database\Eloquent\Builder;
  * @property bool        $excluido
  * @property-read \App\Models\Role|null $role
  */
-class Usuario extends Authenticatable
+class Usuario extends Authenticatable implements JWTSubject
 {
     use HasFactory, Notifiable;
 
@@ -108,5 +110,17 @@ class Usuario extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'role_id');
+    }
+
+
+    // Métodos exigidos pelo contrato JWTSubject
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims()
+    {
+        return [];
     }
 }

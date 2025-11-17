@@ -5,11 +5,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\WebAuthController;
 
 Route::get('/', function () {
     return view('welcome');
 });
-Auth::loginUsingId(300);
+//Auth::loginUsingId(300);
 Route::prefix('usuario')->group(function () {
     Route::get('/create', [UsuarioController::class, 'create'])->name('usuario.create');
     Route::post('/', [UsuarioController::class, 'store'])->name('usuario.store');
@@ -48,5 +49,20 @@ Route::prefix('module')->group(function () {
     Route::get('/{id}', [ModuleController::class, 'show'])->name('module.show');
     Route::get('/', [ModuleController::class, 'index'])->name('module.index');
 });
+
+
+
+Route::get('/login', [WebAuthController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [WebAuthController::class, 'login'])->name('login.post');
+Route::get('/logout', [WebAuthController::class, 'logout'])->name('logout');
+Route::post('/token/refresh', [WebAuthController::class, 'refresh'])->name('token.refresh');
+
+Route::middleware('jwt.web')->group(function () {
+    Route::get('/dashboard', function () {
+        $user = auth('jwt_web')->user();
+        return view('dashboard', compact('user'));
+    })->name('dashboard');
+});
+
 
 
