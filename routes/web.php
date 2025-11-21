@@ -1,16 +1,26 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissaoController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\Auth\LoginController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
+
+Route::get('/login', [LoginController::class, 'form'])->name('login');
+Route::post('/login', [LoginController::class, 'login'])->name('login.execute');
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+
 Route::middleware(['auth'])->group(function () {
+
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
 
     Route::prefix('usuario')->group(function () {
         Route::get('/create', [UsuarioController::class, 'create'])->name('usuario.create');
@@ -52,9 +62,7 @@ Route::middleware(['auth'])->group(function () {
     });
 });
 
-Route::get('/login', [App\Http\Controllers\Auth\LoginController::class, 'form'])->name('login.form');
-Route::post('/login', [App\Http\Controllers\Auth\LoginController::class, 'login'])->name('login.execute');
-Route::post('/logout', [App\Http\Controllers\Auth\LoginController::class, 'logout'])->name('logout');
+
 
 
 

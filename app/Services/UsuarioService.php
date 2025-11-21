@@ -57,10 +57,6 @@ class UsuarioService
      */
     public function create(array $data)
     {
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
-        }
-
         return $this->repository->create($data);
     }
 
@@ -115,9 +111,9 @@ class UsuarioService
             return false;
         }
 
-        if ($usuario->status !== 'AT') {
-            return false;
-        }
+//        if ($usuario->status !== 'AT') {
+//            return false;
+//        }
 
         return $usuario;
     }

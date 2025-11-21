@@ -66,8 +66,7 @@ class UsuarioController extends Controller
     public function store(UsuarioRequest $request)
     {
         $this->service->create($request->validated());
-        Alert::success('Sucesso!', 'Usuário criado com sucesso!');
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Função atualizada com sucesso!');
     }
 
     /**

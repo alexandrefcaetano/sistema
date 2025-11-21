@@ -15,7 +15,6 @@ class UsuarioRequest extends FormRequest
 
     public function rules(): array
     {
-        // Pega o ID do usuário da rota (compatível com rotas tipo usuario/{id})
         $userId = $this->route('id');
 
         $rules = [
@@ -23,22 +22,38 @@ class UsuarioRequest extends FormRequest
             'email'            => [
                 'required',
                 'email',
-                Rule::unique('usuario', 'email')->ignore($userId), // tabela 'usuario'
+                Rule::unique('usuario', 'email')->ignore($userId),
             ],
-            'status'           => 'required|string|max:2',
             'contato'          => 'required|json',
             'cpf'              => 'required|string|max:14',
             'data_nascimento'  => 'required|date_format:d/m/Y',
             'sexo'             => 'required|string|max:2',
         ];
 
-        // Cadastro (store)
+        /**
+         * CREATE (POST)
+         * O status não é obrigatório porque é definido no Repository
+         */
         if ($this->isMethod('post')) {
-            $rules['password'] = 'required|string|min:6|confirmed';
+
+            // Senha obrigatória *somente se vier do formulário*
+            if ($this->filled('password')) {
+                $rules['password'] = 'required|string|min:6|confirmed';
+            } else {
+                // Caso não envie, usamos a senha padrão no passedValidation()
+                $rules['password'] = 'nullable';
+            }
+
+            $rules['status'] = 'nullable';  // repository define
         }
 
-        // Edição (update)
+        /**
+         * UPDATE (PUT/PATCH)
+         */
         if ($this->isMethod('put') || $this->isMethod('patch')) {
+
+            $rules['status'] = 'required|string|max:2';
+
             if ($this->filled('password') && $this->input('password') !== '********') {
                 $rules['password'] = 'string|min:6|confirmed';
             }
@@ -47,14 +62,16 @@ class UsuarioRequest extends FormRequest
         return $rules;
     }
 
-    protected function prepareForValidation(): void
+    /**
+     * Converte a data *apenas depois* da validação,
+     * para não quebrar o date_format no rules()
+     */
+    protected function passedValidation(): void
     {
-        // Normaliza o formato da data de nascimento
-        $data = $this->input('data_nascimento');
+        // Trata data_nascimento: d/m/Y → Y-m-d
+        $data = $this->data_nascimento;
 
         if ($data) {
-            $data = trim($data);
-            // Corrige o formato da data (era 'd/m/yyyy', o correto é 'd/m/Y')
             $date = \DateTime::createFromFormat('d/m/Y', $data);
 
             if ($date) {
@@ -64,10 +81,11 @@ class UsuarioRequest extends FormRequest
             }
         }
 
-        // Define a senha padrão ao criar novo usuário
-        if ($this->isMethod('post')) {
+        // No create, se não enviou senha, define a padrão
+        if ($this->isMethod('post') && empty($this->password)) {
             $this->merge([
-                'password' => $this->input('password', Usuario::SENHA_PADRAO),
+                'password' => Usuario::SENHA_PADRAO,
+                'password_confirmation' => Usuario::SENHA_PADRAO,
             ]);
         }
     }
@@ -79,7 +97,6 @@ class UsuarioRequest extends FormRequest
             'email.required'            => 'O e-mail é obrigatório.',
             'email.email'               => 'Informe um e-mail válido.',
             'email.unique'              => 'Este e-mail já está cadastrado.',
-            'status.required'           => 'O status é obrigatório.',
             'contato.required'          => 'O campo de contato é obrigatório.',
             'contato.json'              => 'O formato do contato é inválido.',
             'cpf.required'              => 'O CPF é obrigatório.',

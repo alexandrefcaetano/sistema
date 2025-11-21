@@ -5,17 +5,9 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Services\UsuarioService;
 
 class LoginController extends Controller
 {
-    protected $usuarioService;
-
-    public function __construct(UsuarioService $usuarioService)
-    {
-        $this->usuarioService = $usuarioService;
-    }
-
     public function form()
     {
         return view('auth.login');
@@ -23,28 +15,37 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
+        // Validação
         $request->validate([
-            'cpf' => 'required',
-            'password' => 'required',
+            'cpf' => ['required', 'string'],
+            'password' => ['required', 'string'],
         ]);
 
-        // Valida no Service
-        $user = $this->usuarioService->autenticar($request->cpf, $request->password);
+        // Dados para autenticação
+        $credentials = [
+            'cpf' => preg_replace('/\D/', '', $request->cpf),
+            'password' => $request->password
+        ];
 
-        if (!$user) {
-            return back()->withErrors(['cpf' => 'CPF ou senha incorretos!'])
-                ->withInput();
+        // Tentar autenticar
+        if (Auth::attempt($credentials)) {
+            // regenerar sessão (segurança)
+            $request->session()->regenerate();
+
+            return redirect()->route('dashboard.index');
         }
 
-        // Faz o login padrão Laravel
-        Auth::login($user);
-
-        return redirect()->route('dashboard');
+        return back()->withErrors([
+            'cpf' => 'CPF ou senha incorretos.',
+        ])->withInput();
     }
 
-    public function logout()
+    public function logout(Request $request)
     {
         Auth::logout();
-        return redirect()->route('login.form');
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect()->route('login');
     }
 }

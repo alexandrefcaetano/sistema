@@ -130,13 +130,6 @@ License: You must have a valid license purchased only from themeforest(the above
             <!--begin::Content-->
             <div class="kt-grid__item kt-grid__item--fluid  kt-grid__item--order-tablet-and-mobile-1  kt-login__wrapper">
 
-                <!--begin::Head-->
-                <div class="kt-login__head">
-                    <span class="kt-login__signup-label">Don't have an account yet?</span>&nbsp;&nbsp;
-                    <a href="#" class="kt-link kt-login__signup-link">Sign Up!</a>
-                </div>
-
-                <!--end::Head-->
 
                 <!--begin::Body-->
                 <div class="kt-login__body">
@@ -148,24 +141,58 @@ License: You must have a valid license purchased only from themeforest(the above
                         </div>
 
                         <!--begin::Form-->
-                        <form class="kt-form" action="" novalidate="novalidate">
+                        <!--begin::Form-->
+                        <form class="" action="{{ route('login.execute') }}" method="POST" novalidate="novalidate">
+                            @csrf
+
+                            {{-- CPF --}}
                             <div class="form-group">
-                                <input class="form-control" type="text" placeholder="CPF" name="email" autocomplete="off">
+                                <input
+                                    class="form-control @error('cpf') is-invalid @enderror"
+                                    type="text"
+                                    placeholder="CPF"
+                                    name="cpf"
+                                    value="{{ old('cpf') }}"
+                                    autocomplete="off"
+                                >
+
+                                @error('cpf')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
+
+                            {{-- Senha --}}
                             <div class="form-group">
-                                <input class="form-control" type="password" placeholder="Password" name="password">
+                                <input
+                                    class="form-control @error('password') is-invalid @enderror"
+                                    type="password"
+                                    placeholder="Senha"
+                                    name="password"
+                                >
+
+                                @error('password')
+                                <div class="invalid-feedback d-block">
+                                    {{ $message }}
+                                </div>
+                                @enderror
                             </div>
 
                             <!--begin::Action-->
                             <div class="kt-login__actions">
                                 <a href="#" class="kt-link kt-login__link-forgot">
-                                    Forgot Password ?
+                                    Esqueceu a senha?
                                 </a>
-                                <button id="kt_login_signin_submit" class="btn btn-primary btn-elevate kt-login__btn-primary">Sign In</button>
+                                <button type="submit" id="" class="btn btn-primary btn-elevate kt-login__btn-primary"
+                                >
+                                    Entrar
+                                </button>
                             </div>
-
                             <!--end::Action-->
                         </form>
+
+                        <!--end::Form-->
 
                         <!--end::Options-->
                     </div>
@@ -181,31 +208,6 @@ License: You must have a valid license purchased only from themeforest(the above
     </div>
 </div>
 
-<!-- end:: Page -->
-
-<!-- begin::Global Config(global config for global JS sciprts) -->
-<script>
-    var KTAppOptions = {
-        "colors": {
-            "state": {
-                "brand": "#5d78ff",
-                "dark": "#282a3c",
-                "light": "#ffffff",
-                "primary": "#5867dd",
-                "success": "#34bfa3",
-                "info": "#36a3f7",
-                "warning": "#ffb822",
-                "danger": "#fd3995"
-            },
-            "base": {
-                "label": ["#c5cbe3", "#a1a8c3", "#3d4465", "#3e4466"],
-                "shape": ["#f0f3ff", "#d9dffa", "#afb4d4", "#646c9a"]
-            }
-        }
-    };
-</script>
-
-<!-- end::Global Config -->
 
 <!--begin:: Global Mandatory Vendors -->
 <script src="../assets/vendors/general/jquery/dist/jquery.js" type="text/javascript"></script>

@@ -69,6 +69,7 @@ class UsuarioRepository
     public function create(array $data)
     {
         $data['password'] = Usuario::SENHA_PADRAO;
+        $data['status'] = Usuario::STATUS_BLOQUEADO;
         return $this->model->create($data);
     }
 
