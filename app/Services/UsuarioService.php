@@ -69,11 +69,19 @@ class UsuarioService
      */
     public function update($id, array $data)
     {
-        if (isset($data['password'])) {
-            $data['password'] = Hash::make($data['password']);
+
+        $roles = $data['roles'] ?? null;
+        unset($data['roles']);
+
+        // Atualiza o usuário normal
+        $user = $this->repository->update($id, $data);
+
+        // Atualiza as roles depois
+        if ($roles !== null) {
+            $user->roles()->sync($roles);
         }
 
-        return $this->repository->update($id, $data);
+        return $user;
     }
 
     /**

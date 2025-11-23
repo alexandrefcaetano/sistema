@@ -137,35 +137,48 @@
             <div class="kt-aside-menu-wrapper kt-grid__item kt-grid__item--fluid" id="kt_aside_menu_wrapper">
                 <div id="kt_aside_menu" class="kt-aside-menu " data-ktmenu-vertical="1" data-ktmenu-scroll="1" data-ktmenu-dropdown-timeout="500">
                     <ul class="kt-menu__nav ">
-                        <li class="kt-menu__item " aria-haspopup="true"><a href="index.html" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-home"></i><span class="kt-menu__link-text">Dashboard</span></a></li>
+                        <li class="kt-menu__item   {{ ativadorLinks(['dashboard.index']) }}" aria-haspopup="true"><a href="{{route('dashboard.index')}}" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-home"></i><span class="kt-menu__link-text">Dashboard</span></a></li>
                         <li class="kt-menu__section ">
                             <h4 class="kt-menu__section-text">Layout</h4>
                             <i class="kt-menu__section-icon flaticon-more-v2"></i>
                         </li>
-                        <li class="kt-menu__item  kt-menu__item--submenu kt-menu__item--open kt-menu__item--here" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-interface-8"></i><span class="kt-menu__link-text">General</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+
+
+
+                        <li class="kt-menu__item  kt-menu__item--submenu " aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-interface-8"></i><span class="kt-menu__link-text">General</span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                             <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                 <ul class="kt-menu__subnav">
                                     <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">General</span></span></li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="layout_general_minimized-aside.html" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Minimized Aside</span></a></li>
+                                    <li class="kt-menu__item kt-menu__item--active" aria-haspopup="true"><a href="" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Minimized Aside</span></a></li>
                                 </ul>
                             </div>
                         </li>
-                        <li class="kt-menu__item " aria-haspopup="true"><a target="_blank" href="https://keenthemes.com/metronic/preview/default/builder.html" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-cogwheel-1"></i><span class="kt-menu__link-text">Builder</span></a></li>
+                        <li class="kt-menu__item " aria-haspopup="true"><a target="_blank" href="" class="kt-menu__link "><i class="kt-menu__link-icon flaticon-cogwheel-1"></i><span class="kt-menu__link-text">Builder</span></a></li>
 
                         <li class="kt-menu__section ">
                             <h4 class="kt-menu__section-text">Controle</h4>
                             <i class="kt-menu__section-icon flaticon-more-v2"></i>
                         </li>
-                        <li class="kt-menu__item  kt-menu__item--submenu" aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-user"></i><span class="kt-menu__link-text">Usuário</span><span class="kt-menu__link-badge"></span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
+                        @can('usuarios.list')
+                        <li class="kt-menu__item  kt-menu__item--submenu {{ ativadorLinks(['usuario.index','usuario.create','usuario.edit','permissao.list','permissao.index','permissao.create','permissao.edit','permissao.list', 'module.index','module.create','module.edit','module.list' ]) }}  " aria-haspopup="true" data-ktmenu-submenu-toggle="hover"><a href="javascript:;" class="kt-menu__link kt-menu__toggle"><i class="kt-menu__link-icon flaticon-user"></i><span class="kt-menu__link-text">Usuário</span><span class="kt-menu__link-badge"></span><i class="kt-menu__ver-arrow la la-angle-right"></i></a>
                             <div class="kt-menu__submenu "><span class="kt-menu__arrow"></span>
                                 <ul class="kt-menu__subnav">
+
                                     <li class="kt-menu__item  kt-menu__item--parent" aria-haspopup="true"><span class="kt-menu__link"><span class="kt-menu__link-text">User Pages</span><span class="kt-menu__link-badge"><span class="kt-badge kt-badge--rounded kt-badge--brand">2</span></span></span></li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('usuario.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Usuário</span></a></li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('permissao.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Permissão</span></a></li>
-                                    <li class="kt-menu__item " aria-haspopup="true"><a href="{{route('module.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Modulos</span></a></li>
+
+                                    @can('usuarios.list')
+                                    <li class="kt-menu__item {{ ativadorSubLinks(['usuario.index','usuario.edit','usuario.create']) }}" aria-haspopup="true"><a href="{{route('usuario.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Usuário</span></a></li>
+                                    @endcan
+                                    @can('Permissões.list')
+                                    <li class="kt-menu__item {{ ativadorSubLinks(['permissao.index','permissao.edit','permissao.create']) }}" aria-haspopup="true"><a href="{{route('permissao.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Permissão</span></a></li>
+                                    @endcan
+                                    @can('Module.list')
+                                    <li class="kt-menu__item {{ ativadorSubLinks(['module.index','module.edit','module.create']) }}" aria-haspopup="true"><a href="{{route('module.index')}}" class="kt-menu__link "><i class="kt-menu__link-bullet kt-menu__link-bullet--dot"><span></span></i><span class="kt-menu__link-text">Modulos</span></a></li>
+                                    @endcan
                                 </ul>
                             </div>
                         </li>
+                        @endcan
 
 
 
@@ -518,7 +531,7 @@
             <!-- begin:: Footer -->
             <div class="kt-footer kt-grid__item kt-grid kt-grid--desktop kt-grid--ver-desktop">
                 <div class="kt-footer__copyright">
-                    2025&nbsp;&copy;&nbsp;<a href="" target="_blank" class="kt-link">Alexandre : Vesion: 1.00</a>
+                    2025&nbsp;&copy;&nbsp;<a href="" target="_blank" class="kt-link">Alexandre : Vesion: {{vession()}}</a>
                 </div>
                 <div class="kt-footer__menu">
                     <a href="" target="_blank" class="kt-footer__menu-link kt-link">About</a>

@@ -40,10 +40,13 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
+{{--                                    {{ dd(array_keys(Gate::abilities())) }}--}}
+                                    @can('Module.create')
                                     <a href="{{ route('module.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Novo Module
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -84,21 +87,26 @@
                                             <td>{!! $module->status_badge !!}</td>
                                             <td>{{ $module->created_at }}</td>
                                             <td>
+                                                @can('Module.update')
                                                 <a href="{{ route('module.edit', $module->id) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
                                                     <i class="flaticon-edit"></i>
                                                 </a>
+                                                @endcan
+                                                @can('Module.list')
                                                 <a href="{{ route('module.show', $module->id) }}"
                                                    class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
                                                     <i class="flaticon2-search-1"></i>
                                                 </a>
-
-                                                <form action="{{ route('module.destroy', $module->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
-                                                        <i class="flaticon2-trash"></i>
-                                                    </button>
-                                                </form>
+                                                @endcan
+                                                @can('Module.delete')
+                                                    <form action="{{ route('module.destroy', $module->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
+                                                            <i class="flaticon2-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
 
                                             </td>
                                         </tr>

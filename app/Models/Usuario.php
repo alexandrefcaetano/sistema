@@ -77,41 +77,85 @@ class Usuario extends Authenticatable
         });
     }
 
-//    public function scopeWithExcluded(Builder $builder)
-//    {
-//        return $builder->withoutGlobalScope('nao_excluido');
-//    }
-//
-//    public function markAsDeleted(): bool
-//    {
-//        $this->excluido = true;
-//        return $this->save();
-//    }
-//
-//    public function restoreFromDeleted(): bool
-//    {
-//        $this->excluido = false;
-//        return $this->save();
-//    }
-//
-//    public function resetToDefaultPassword(): bool
-//    {
-//        $this->password = self::SENHA_PADRAO;
-//        return $this->save();
-//    }
+    public function scopeWithExcluded(Builder $builder)
+    {
+        return $builder->withoutGlobalScope('nao_excluido');
+    }
+
+    public function markAsDeleted(): bool
+    {
+        $this->excluido = true;
+        return $this->save();
+    }
+
+    public function restoreFromDeleted(): bool
+    {
+        $this->excluido = false;
+        return $this->save();
+    }
+
+    public function resetToDefaultPassword(): bool
+    {
+        $this->password = self::SENHA_PADRAO;
+        return $this->save();
+    }
 
     /**
      * Relacionamento com a Role (papel do usuário).
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
-    public function role()
+//    public function role()
+//    {
+//        return $this->belongsTo(Role::class, 'role_id');
+//    }
+
+    public function roles()
     {
-        return $this->belongsTo(Role::class, 'role_id');
+        return $this->belongsToMany(Role::class, 'role_usuario', 'usuario_id', 'role_id');
     }
 
     public function getAuthIdentifierName()
     {
         return 'cpf';
+    }
+
+    public function abilities()
+    {
+        return $this->roles()
+            ->with('abilities')
+            ->get()
+            ->pluck('abilities')
+            ->flatten()
+            ->unique('id');
+    }
+
+
+    public function hasRole($roleName): bool
+    {
+        return $this->roles->contains('name', $roleName);
+    }
+
+    public function hasAbility($abilityName): bool
+    {
+        return $this->abilities()->contains('name', $abilityName);
+    }
+
+    public function hasAbilityRota(string $ability): bool
+    {
+        // abilities() retorna uma collection de abilities
+        return $this->abilities()
+            ->map(function ($ab) {
+                // Concatenando módulo + nome da permissão
+                return $ab->module->name . '.' . $ab->name;
+            })
+            ->contains($ability);
+    }
+    protected function dataNascimento(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => \Carbon\Carbon::parse($value)->format('d/m/Y'),
+            set: fn ($value) => \Carbon\Carbon::createFromFormat('d/m/Y', $value)->format('Y-m-d'),
+        );
     }
 }

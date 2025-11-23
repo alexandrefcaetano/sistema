@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModuleRequest;
 use App\Services\ModuleService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /**
  * Controller responsável por gerenciar as operações de CRUD dos Módulos.
@@ -28,6 +29,7 @@ class ModuleController extends Controller
      */
     public function __construct(ModuleService $service)
     {
+
         $this->service = $service;
     }
 
@@ -39,6 +41,10 @@ class ModuleController extends Controller
      */
     public function index(Request $request)
     {
+
+//        dd(Auth::user()->abilities()->map(function ($ab) {
+//            return $ab->module->name . '.' . $ab->name;
+//        }));
         // Quantidade de itens por página (valor padrão: 10)
         $perPage = $request->input('per_page', 10);
 

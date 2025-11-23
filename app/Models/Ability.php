@@ -64,7 +64,7 @@ class Ability extends BaseModel
     {
         return $this->belongsToMany(
             Role::class,
-            'role_ability',
+            'ability_role',
             'ability_id',
             'role_id'
         );
@@ -79,6 +79,6 @@ class Ability extends BaseModel
      */
     public function module()
     {
-        return $this->belongsTo(Module::class);
+        return $this->belongsTo(Module::class, 'module_id');
     }
 }

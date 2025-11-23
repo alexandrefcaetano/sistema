@@ -28,6 +28,9 @@ class UsuarioRequest extends FormRequest
             'cpf'              => 'required|string|max:14',
             'data_nascimento'  => 'required|date_format:d/m/Y',
             'sexo'             => 'required|string|max:2',
+
+            'roles'   => 'sometimes|array',
+            'roles.*' => 'integer|exists:roles,id',
         ];
 
         /**

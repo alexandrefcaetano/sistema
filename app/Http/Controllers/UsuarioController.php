@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use Illuminate\Http\Request;
 use App\Services\UsuarioService;
 use App\Http\Requests\UsuarioRequest;
@@ -54,7 +55,9 @@ class UsuarioController extends Controller
      */
     public function create()
     {
-        return view('users.form', ['user' => null]);
+        $roles = Role::all(); // envia todas as roles para o select
+        $user = null;
+        return view('users.form', compact('roles', 'user'));
     }
 
     /**
@@ -89,8 +92,13 @@ class UsuarioController extends Controller
      */
     public function edit($id)
     {
+        $roles = Role::all();
+
+
         $user = $this->service->getById($id);
-        return view('users.form', compact('user'));
+
+        $user->load('roles');
+        return view('users.form', compact('user','roles'));
     }
 
     /**
@@ -103,7 +111,8 @@ class UsuarioController extends Controller
     public function update(UsuarioRequest $request, $id)
     {
         $this->service->update($id, $request->validated());
-        return redirect()->back()->with('success', 'Usuário atualizado com sucesso!');
+        return redirect()->route('users.index')->with('success', 'Usuário atualizado com sucesso!');
+        //return redirect()->back()->with('success', 'Usuário atualizado com sucesso!');
     }
 
     /**

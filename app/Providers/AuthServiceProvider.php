@@ -14,22 +14,15 @@ class AuthServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
-        // Evita erro durante migrações iniciais
         if (!Schema::hasTable('abilities') || !Schema::hasTable('modules')) {
             return;
         }
 
-        // Carregar todas as abilities com module para montar o Gate correto
         $abilities = Ability::with('module')->get();
-        //dd($abilities->map(fn($a) => $a->module->name . '.' . $a->name)->toArray());
+
         foreach ($abilities as $ability) {
+            if (!$ability->module) continue;
 
-            // Se não tiver módulo por alguma inconsistência do BD, ignora
-            if (!$ability->module) {
-                continue;
-            }
-
-            // Nome completo da ability → Module.create
             $fullName = $ability->module->name . '.' . $ability->name;
 
             Gate::define($fullName, function (Usuario $user) use ($ability) {
@@ -37,11 +30,5 @@ class AuthServiceProvider extends ServiceProvider
             });
         }
 
-        // Super admin
-//        Gate::before(function (Usuario $user, $ability) {
-//            if ($user->hasRole('Administrador')) {
-//                return true;
-//            }
-//        });
     }
 }

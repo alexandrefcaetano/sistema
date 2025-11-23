@@ -15,30 +15,60 @@ class LoginController extends Controller
 
     public function login(Request $request)
     {
-        // Validação
+        // 1. Validação
         $request->validate([
             'cpf' => ['required', 'string'],
             'password' => ['required', 'string'],
         ]);
 
-        // Dados para autenticação
-        $credentials = [
-            'cpf' => preg_replace('/\D/', '', $request->cpf),
-            'password' => $request->password
-        ];
+        // 2. Normaliza o CPF (remove pontos e traços)
+        $cpf = preg_replace('/\D/', '', $request->cpf);
 
-        // Tentar autenticar
-        if (Auth::attempt($credentials)) {
-            // regenerar sessão (segurança)
-            $request->session()->regenerate();
+        // 3. Buscar usuário pelo CPF (antes do Auth)
+        $user = \App\Models\Usuario::where('cpf', $cpf)->first();
 
-            return redirect()->route('dashboard.index');
+        if (!$user) {
+            return back()->withErrors([
+                'cpf' => 'Usuário não encontrado.',
+            ])->withInput();
         }
 
-        return back()->withErrors([
-            'cpf' => 'CPF ou senha incorretos.',
-        ])->withInput();
+        // 4. Verificar se está ativo (caso use essa coluna)
+        if (isset($user->ativo) && !$user->ativo) {
+            return back()->withErrors([
+                'cpf' => 'Seu usuário está inativo. Contate o administrador.',
+            ])->withInput();
+        }
+
+        // 5. Tentar autenticar
+        $credentials = [
+            'cpf' => $cpf,
+            'password' => $request->password,
+        ];
+
+        if (!Auth::attempt($credentials)) {
+            return back()->withErrors([
+                'cpf' => 'CPF ou senha incorretos.',
+            ])->withInput();
+        }
+
+        // 6. Segurança: regenerar a sessão
+        $request->session()->regenerate();
+
+        // 7. Verificação de ACL (role e ability)
+        $user = Auth::user();
+
+        // 8. Log de auditoria (opcional, recomendado)
+        \Log::info('Login realizado', [
+            'cpf' => $cpf,
+            'user_id' => $user->id ?? null,
+            'ip' => $request->ip()
+        ]);
+
+        // 9. Redireciona
+        return redirect()->route('dashboard.index');
     }
+
 
     public function logout(Request $request)
     {

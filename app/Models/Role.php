@@ -87,7 +87,8 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(User::class, 'role_usuario');
+        return $this->belongsToMany(
+            Usuario::class,'role_usuario','role_id','usuario_id');
     }
 
     // ---------------------------------------------------------
@@ -114,4 +115,5 @@ class Role extends Model
         $this->excluido = false;
         return $this->save();
     }
+
 }

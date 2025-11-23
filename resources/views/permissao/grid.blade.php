@@ -42,10 +42,12 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
+                                    @can('Permissões.create')
                                     <a href="{{ route('permissao.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Nova Permissão
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -81,30 +83,36 @@
                                             <td>{{ $role->created_at }}</td>
                                             <td>{{ $role->getStatusLabel() }}</td>
                                             <td>
+                                                @can('Permissões.update')
                                                 <a href="{{ route('permissao.edit', $role->id) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
                                                     <i class="flaticon-edit"></i>
                                                 </a>
+                                                @endcan
+                                                @can('Permissões.list')
                                                 <a href="{{ route('permissao.show', $role->id) }}"
                                                    class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-user">
                                                     <i class="flaticon2-search-1"></i>
                                                 </a>
-                                                @if($role->excluido)
-                                                    <form action="{{ route('permissao.restore', $role->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <button class="btn btn-outline-success btn-sm btn-icon btn-icon-md btn-restore">
-                                                            <i class="flaticon2-checkmark"></i>
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <form action="{{ route('permissao.destroy', $role->id) }}" method="POST" class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
-                                                            <i class="flaticon2-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                @endif
+                                                    @endcan
+                                                    @can('Permissões.delete')
+                                                        @if($role->excluido)
+                                                            <form action="{{ route('permissao.restore', $role->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('PUT')
+                                                                <button class="btn btn-outline-success btn-sm btn-icon btn-icon-md btn-restore">
+                                                                    <i class="flaticon2-checkmark"></i>
+                                                                </button>
+                                                            </form>
+                                                        @else
+                                                            <form action="{{ route('permissao.destroy', $role->id) }}" method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
+                                                                    <i class="flaticon2-trash"></i>
+                                                                </button>
+                                                            </form>
+                                                        @endif
+                                                    @endcan
                                             </td>
                                         </tr>
                                     @empty

@@ -97,7 +97,7 @@
                         </div>
                         <div class="col-lg-4">
                             <label class="">Data Nascimento:</label>
-                            <input type="text" name="data_nascimento" class="form-control" id="kt_datepicker_1" readonly placeholder="Select date" />
+                            <input type="text" name="data_nascimento" class="form-control" id="kt_datepicker_1" value="{{ old('data_nascimento', $user->data_nascimento ?? '') }}" readonly placeholder="Select date" />
                         </div>
                         <div class="col-lg-4">
                             <label>Sexo:</label>
@@ -112,6 +112,31 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label class="col-form-label col-lg-3 col-sm-12">Permissões</label>
+                        <div class="col-lg-4 col-md-9 col-sm-12">
+                            <select class="form-control m-select2"
+                                    id="kt_select2_3"
+                                    name="roles[]"
+                                    multiple="multiple">
+
+                                @foreach($roles as $role)
+                                    <option value="{{ $role->id }}"
+                                        {{ in_array(
+                                            $role->id,
+                                            (array) old('roles', $user->roles->pluck('id')->toArray())
+                                        ) ? 'selected' : '' }}>
+                                        {{ $role->name }}
+                                    </option>
+                                @endforeach
+
+                            </select>
+                        </div>
+                    </div>
+
+
+
 
                     <div class="form-group row">
                         {{-- Campo Senha --}}
@@ -229,7 +254,7 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-
+    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/select2.js') }}" type="text/javascript"></script>
 
     <script src="{{ asset('js/modal-contato.js') }}"></script>
 

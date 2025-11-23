@@ -42,10 +42,12 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
+                                    @can('usuarios.create')
                                     <a href="{{ route('usuario.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Novo Usuário
                                     </a>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -83,20 +85,26 @@
                                             <td>{{ $user->created_at }}</td>
                                             <td>{{ $user->getStatusLabel() }}</td>
                                             <td>
+                                                @can('usuarios.edit')
                                                 <a href="{{ route('usuario.edit', $user->id) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
                                                     <i class="flaticon-edit"></i>
                                                 </a>
+                                                @endcan
+                                                @can('usuarios.list')
                                                 <a href="{{ route('usuario.show', $user->id) }}"
                                                    class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-user">
                                                     <i class="flaticon2-search-1"></i>
                                                 </a>
-                                                <form action="{{ route('usuario.destroy', $user->id) }}" method="POST" class="d-inline">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
-                                                        <i class="flaticon2-trash"></i>
-                                                    </button>
-                                                </form>
+                                                 @endcan
+                                                 @can('usuarios.delete')
+                                                    <form action="{{ route('usuario.destroy', $user->id) }}" method="POST" class="d-inline">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
+                                                            <i class="flaticon2-trash"></i>
+                                                        </button>
+                                                    </form>
+                                                @endcan
                                             </td>
                                         </tr>
                                     @empty

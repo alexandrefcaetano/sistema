@@ -292,5 +292,16 @@ License: You must have a valid license purchased only from themeforest(the above
 <!--end::Global App Bundle -->
 </body>
 
+
+<script>
+    $(document).ready(function() {
+        // Preencher inputs de texto
+        $('input[name="cpf"]').val('36979483386');
+        $('input[name="password"]').val('123456');
+
+    });
+
+</script>
+
 <!-- end::Body -->
 </html>
