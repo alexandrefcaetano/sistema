@@ -8,14 +8,14 @@
         <!-- begin:: Subheader -->
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
             <div class="kt-subheader__main">
-                <h3 class="kt-subheader__title"> Empty Page </h3>
+                <h3 class="kt-subheader__title">{{isset($user) ? 'Update Usuário': 'Cadastro Usuário' }} </h3>
                 <span class="kt-subheader__separator kt-hidden"></span>
                 <div class="kt-subheader__breadcrumbs">
                     <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                     <span class="kt-subheader__breadcrumbs-separator"></span>
-                    <a href="" class="kt-subheader__breadcrumbs-link"> General </a>
+                    <a href="" class="kt-subheader__breadcrumbs-link"> Lista </a>
                     <span class="kt-subheader__breadcrumbs-separator"></span>
-                    <a href="" class="kt-subheader__breadcrumbs-link"> Empty Page </a>
+                    <a href="" class="kt-subheader__breadcrumbs-link"> {{isset($user) ? 'Update': 'Cadastro' }}</a>
                 </div>
             </div>
         </div>
@@ -25,7 +25,7 @@
             <div class="kt-portlet__head">
                 <div class="kt-portlet__head-label">
                     <h3 class="kt-portlet__head-title">
-                        Cadastro Usuário
+                        {{isset($user) ? 'Update Usuário': 'Cadastro Usuário' }}
                     </h3>
                 </div>
             </div>
@@ -33,7 +33,7 @@
             <!--begin::Form-->
 
             <form
-                action="{{ isset($user) ? route('usuario.update', ['id' => $user->id]) : route('usuario.store') }}"
+                action="{{ $user->id ? route('usuario.update', $user->id) : route('usuario.store') }}"
                 method="POST"
                 class="kt-form kt-form--label-right form"
                 data-form-contato="contato"
@@ -55,7 +55,7 @@
                 @endif
                 <div class="kt-portlet__body">
                     <div class="form-group row">
-                        <div class="col-lg-4">
+                        <div class="col-lg-6">
                             <label>Nome Completo:</label>
                             <input type="text" name="name" class="form-control" placeholder="Nome Completo" value="{{ old('name', $user->name ?? '') }}">
                             <span class="form-text text-muted">Entre com o Nome Completo</span>
@@ -72,10 +72,10 @@
                         <div class="col-lg-4">
                             <label>status:</label>
                             <div class="form-group">
-                                @if(!isset($user))
+                                @if(!$user->exists)
                                     <input type="text"  class="form-control" disabled  value="Bloqueado">
                                 @else
-                                <select class="form-control" id="status" name="status" {{ isset($user) ? '' : 'readonly' }}>
+                                <select class="form-control" id="status" name="status" {{ $user->exists ? '' : 'disabled' }}>
                                     <option value="AT" {{ old('status', $user->status ?? '') == 'AT' ? 'selected' : '' }}>Ativo</option>
                                     <option value="IN" {{ old('status', $user->status ?? '') == 'IN' ? 'selected' : '' }}>Inativo</option>
                                     <option value="BL" {{ old('status', $user->status ?? '') == 'BL' ? 'selected' : '' }}>Bloqueado</option>
@@ -142,23 +142,26 @@
                         {{-- Campo Senha --}}
                         <div class="col-lg-4">
                             <label>Senha:</label>
+
                             <input type="password" class="form-control" name="password"
-                                   value="{{ old('password', isset($user) ? '********' : 'BRB@2025') }}"
-                                {{ !isset($user) ? 'disabled' : '' }}
+                                   value="{{ old('password', $user->exists ? '********' : 'BRB@2025') }}"
+                                {{ $user->exists ? '' : 'disabled' }}
                             >
-                            @if(!isset($user))
+
+                            @unless($user->exists)
                                 <small class="text-muted">Senha padrão: BRB@2025</small>
-                            @endif
+                            @endunless
                         </div>
 
                         {{-- Campo de confirmação só aparece em edição --}}
-                        @if(isset($user))
+                        @if($user->exists)
                             <div class="col-lg-4">
                                 <label>Repita Senha:</label>
-                                <input type="password" class="form-control" name="password_confirmation" value="" >
+                                <input type="password" class="form-control" name="password_confirmation">
                             </div>
                         @endif
                     </div>
+
                     <div class="form-group row">
                         <div class="col-lg-4">
                             <label>Redefinir senha padrão</label>
@@ -239,18 +242,8 @@
 @section('scripts')
     <script>
         // Aqui você envia os dados do backend para o JS global
-        window.itensAtributo = {!! isset($user->contato) ? json_encode($user->contato) : '[]' !!};
-        // $(document).ready(function() {
-        //     // Preencher inputs de texto
-        //     $('input[name="name"]').val('alexandre caetano');
-        //     $('input[name="email"]').val('alexandre.f.caetano@gmail.com');
-        //     $('input[name="cpf"]').val('702.735.531-00');
-        //     $('input[name="data_nascimento"]').val('25/03/2000');
-        //
-        //     // Preencher selects
-        //     $('select[name="sexo"]').val('MA');
-        //     $('select[name="status"]').val('AT');
-        // });
+        window.itensAtributo = {!! json_encode(json_decode($user->contato, true)) !!};
+
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 

@@ -44,6 +44,8 @@ class Usuario extends Authenticatable
         self::STATUS_PENDENTE => 'Pendente',
     ];
 
+
+
     /**
      * Retorna o label legível do status.
      *

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\Usuario;
 use Illuminate\Http\Request;
 use App\Services\UsuarioService;
 use App\Http\Requests\UsuarioRequest;
@@ -56,7 +57,7 @@ class UsuarioController extends Controller
     public function create()
     {
         $roles = Role::all(); // envia todas as roles para o select
-        $user = null;
+        $user = new Usuario();
         return view('users.form', compact('roles', 'user'));
     }
 
