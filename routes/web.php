@@ -1,6 +1,7 @@
 <?php
 
 
+use App\Http\Controllers\AplicacaoController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PermissaoController;
 use Illuminate\Support\Facades\Route;
@@ -65,24 +66,24 @@ Route::middleware(['auth'])->group(function () {
 
     // Módulos
     Route::prefix('module')->group(function () {
-        Route::get('/create', [ModuleController::class, 'create'])
-            ->middleware('ability:Module.create')->name('module.create');
-        Route::get('/', [ModuleController::class, 'index'])
-            ->middleware('ability:Module.list')->name('module.index');
-        Route::post('/', [ModuleController::class, 'store'])
-            ->middleware('ability:Module.create')->name('module.store');
-
-        Route::get('/edit/{id}', [ModuleController::class, 'edit'])
-            ->middleware('ability:Module.update')->name('module.edit');
-        Route::put('/{id}', [ModuleController::class, 'update'])
-            ->middleware('ability:Module.update')->name('module.update');
-        Route::delete('/{id}', [ModuleController::class, 'destroy'])
-            ->middleware('ability:Module.delete')->name('module.destroy');
-
-        Route::get('/{id}', [ModuleController::class, 'show'])
-            ->middleware('ability:Module.list')->name('module.show');
+        Route::get('/create', [ModuleController::class, 'create'])->middleware('ability:Module.create')->name('module.create');
+        Route::get('/', [ModuleController::class, 'index'])->middleware('ability:Module.list')->name('module.index');
+        Route::post('/', [ModuleController::class, 'store'])->middleware('ability:Module.create')->name('module.store');
+        Route::get('/edit/{id}', [ModuleController::class, 'edit'])->middleware('ability:Module.update')->name('module.edit');
+        Route::put('/{id}', [ModuleController::class, 'update'])->middleware('ability:Module.update')->name('module.update');
+        Route::delete('/{id}', [ModuleController::class, 'destroy'])->middleware('ability:Module.delete')->name('module.destroy');
+        Route::get('/{id}', [ModuleController::class, 'show'])->middleware('ability:Module.list')->name('module.show');
     });
 
+});
+
+Route::prefix('aplicacoes')->group(function () {
+    Route::get('/create', [AplicacaoController::class, 'create'])->name('aplicacoes.create');
+    Route::get('/', [AplicacaoController::class, 'index'])->name('aplicacoes.index');
+    Route::get('{id}', [AplicacaoController::class, 'show'])->name('aplicacoes.show');
+    Route::post('/', [AplicacaoController::class, 'store'])->name('aplicacoes.store');
+    Route::put('{id}', [AplicacaoController::class, 'update'])->name('aplicacoes.update');
+    Route::delete('{id}', [AplicacaoController::class, 'destroy'])->name('aplicacoes.destroy');
 });
 
 

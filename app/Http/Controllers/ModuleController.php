@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ModuleRequest;
 use App\Services\ModuleService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Controller responsável por gerenciar as operações de CRUD dos Módulos.

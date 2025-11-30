@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UsuarioRequest;
 use App\Models\Role;
 use App\Models\Usuario;
-use Illuminate\Http\Request;
 use App\Services\UsuarioService;
-use App\Http\Requests\UsuarioRequest;
+use Illuminate\Http\Request;
 use RealRashid\SweetAlert\Facades\Alert;
 
 /**
