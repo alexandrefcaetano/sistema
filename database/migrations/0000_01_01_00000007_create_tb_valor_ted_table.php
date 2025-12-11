@@ -6,20 +6,21 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration {
     public function up(): void {
-        Schema::create('tb_valor_ted', function (Blueprint $table) {
+        Schema::create('tb_valores_ted', function (Blueprint $table) {
 
-            $table->integer('cd_valor_ted')->primary();
-            $table->integer('cd_ted');
-            $table->decimal('vl_ted', 16, 2)->nullable();
+            $table->id('cd_valor_ted')->primary();
+            $table->foreignId('cd_ted')->constrained('tb_ted', 'cd_ted');
+            $table->decimal('vlr_ted', 16, 2);
 
-            $table->foreign('cd_ted')
-                ->references('cd_ted')
-                ->on('tb_ted');
+            $table->integer('nr_matricula_create');
+            $table->timestamp('dt_create');
+            $table->integer('nr_matricula_atualizacao')->nullable();
+            $table->timestamp('dt_update')->nullable();
         });
 
     }
 
     public function down(): void {
-        Schema::dropIfExists('tb_valor_ted');
+        Schema::dropIfExists('tb_valores_ted');
     }
 };

@@ -31,7 +31,7 @@
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
 {{--                                    @can('Module.create')--}}
-                                    <a href="{{ route('aplicacoes.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    <a href="{{ route('aplicacoas.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Nova Aplicaçao
                                     </a>
@@ -46,37 +46,42 @@
                                 <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap">
                                     <thead>
                                     <tr>
+                                        <th>Codigo</th>
                                         <th>Aplicação</th>
                                         <th>Codigo </th>
                                         <th>Tipo</th>
-                                        <th>Telefone</th>
-                                        <th></th>
                                         <th>Ações</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    @foreach ($aplicaceos as $aplicaceo)
+                                    @foreach ($aplicaceos as $aplicacao)
                                         <tr>
-                                            <td>{{ $aplicaceo->no_aplicacao }}</td>
-                                            <td>{{ $aplicaceo->cd_aplicacao }}</td>
-                                            <td>{{ $aplicaceo->no_tipo }}</td>
-                                            <td>{{$aplicaceo->nr_telefone_gestor}}</td>
-                                            <td>{{ $aplicaceo->st_aplicacao }}</td>
+                                            <td>{{ $aplicacao->cd_aplicacao }}</td>
+                                            <td>
+                                                @if ($aplicacao->no_rota && Route::has($aplicacao->no_rota))
+                                                    <a href="{{ route($aplicacao->no_rota) }}">{{ $aplicacao->no_aplicacao }}</a>
+                                                @else
+                                                    {{ $aplicacao->no_aplicacao }}
+                                                @endif
+                                            </td>
+
+                                            <td>{{ $aplicacao->no_aplicacao }}</td>
+                                            <td>{!! $aplicacao->status_badge !!}</td>
 
                                             <td>
                                                 @can('Module.update')
-                                                <a href="{{ route('aplicaceao.edit', $aplicaceo->cd_aplicacao) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                <a href="{{ route('aplicacoas.edit', $aplicacao->cd_aplicacao) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
                                                     <i class="flaticon-edit"></i>
                                                 </a>
                                                 @endcan
                                                 @can('Module.list')
-                                                <a href="{{ route('aplicaceao.show', $aplicaceo->cd_aplicacao) }}"
-                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
-                                                    <i class="flaticon2-search-1"></i>
-                                                </a>
+{{--                                                <a href="{{ route('aplicacoas.show', $aplicacao->cd_aplicacao) }}"--}}
+{{--                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">--}}
+{{--                                                    <i class="flaticon2-search-1"></i>--}}
+{{--                                                </a>--}}
                                                 @endcan
                                                 @can('Module.delete')
-                                                    <form action="{{ route('aplicaceao.destroy', $aplicaceo->cd_aplicacao) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('aplicacoas.delete', $aplicacao->cd_aplicacao) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >

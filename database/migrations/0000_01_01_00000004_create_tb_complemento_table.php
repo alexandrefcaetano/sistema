@@ -8,17 +8,20 @@ return new class extends Migration {
     public function up(): void {
         Schema::create('tb_complemento', function (Blueprint $table) {
 
-            $table->integer('cd_complemento')->primary();
-            $table->integer('cd_solicitacao');
+            $table->id('cd_complemento')->primary();
+            $table->foreignId('cd_status')->constrained('tb_status', 'cd_status');
+            $table->foreignId('cd_solicitacao')->constrained('tb_solicitacao', 'cd_solicitacao');
+            $table->integer('nr_matricula')->nullable();
             $table->string('ds_obs', 500)->nullable();
             $table->timestamp('dt_complemento')->nullable();
-            $table->string('st_complemento', 10)->nullable();
-            $table->integer('nr_matricula')->nullable();
-            $table->integer('cd_status_solicitacao')->nullable();
-            $table->integer('cd_tipo_complemento')->nullable();
 
-            $table->foreign('cd_solicitacao')->references('cd_solicitacao')->on('tb_solicitacao');
-            $table->foreign('cd_status_solicitacao')->references('cd_status_solicitacao')->on('tb_status_solicitacao');
+            $table->integer('nr_matricula_create');
+            $table->timestamp('dt_create');
+            $table->integer('nr_matricula_atualizacao')->nullable();
+            $table->timestamp('dt_update')->nullable();
+
+
+
         });
 
     }

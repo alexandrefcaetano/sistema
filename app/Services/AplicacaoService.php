@@ -4,7 +4,6 @@ namespace App\Services;
 
 use App\Repository\AplicacaoRepository;
 
-
 class AplicacaoService
 {
     public function __construct(private AplicacaoRepository $repo) {}
@@ -43,4 +42,5 @@ class AplicacaoService
     {
         return $this->repo->paginate($perPage);
     }
+
 }

@@ -3,7 +3,10 @@
 
 use App\Http\Controllers\AplicacaoController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DossieController;
+use App\Http\Controllers\GeralController;
 use App\Http\Controllers\PermissaoController;
+use App\Http\Controllers\TedController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UsuarioController;
 use App\Http\Controllers\ModuleController;
@@ -78,14 +81,40 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::prefix('aplicacoes')->group(function () {
-    Route::get('/create', [AplicacaoController::class, 'create'])->name('aplicacoes.create');
-    Route::get('/', [AplicacaoController::class, 'index'])->name('aplicacoes.index');
+    Route::get('/create', [AplicacaoController::class, 'create'])->name('aplicacoas.create');
+    Route::get('/', [AplicacaoController::class, 'index'])->name('aplicacoas.index');
     Route::get('{id}', [AplicacaoController::class, 'show'])->name('aplicacoes.show');
-    Route::post('/', [AplicacaoController::class, 'store'])->name('aplicacoes.store');
-    Route::put('{id}', [AplicacaoController::class, 'update'])->name('aplicacoes.update');
-    Route::delete('{id}', [AplicacaoController::class, 'destroy'])->name('aplicacoes.destroy');
+    Route::post('/', [AplicacaoController::class, 'store'])->name('aplicacoas.store');
+    Route::get('/edit/{id}', [AplicacaoController::class, 'edit'])->name('aplicacoas.edit');
+    Route::put('{id}', [AplicacaoController::class, 'update'])->name('aplicacoas.update');
+    Route::delete('{id}', [AplicacaoController::class, 'destroy'])->name('aplicacoas.delete');
 });
 
+
+Route::prefix('json')->group(function () {
+    Route::get('/dependencias/{cod}', [GeralController::class, 'dependencias'])
+        ->name('geral.dependencias');
+});
+
+
+Route::prefix('ted')->group(function () {
+    Route::get('/create', [TedController::class, 'create'])->name('ted.create');
+    Route::get('/', [TedController::class, 'index'])->name('ted.index');
+    Route::get('{id}', [TedController::class, 'show'])->name('ted.show');
+    Route::post('/', [TedController::class, 'store'])->name('ted.store');
+    Route::put('{id}', [TedController::class, 'update'])->name('ted.update');
+    Route::delete('{id}', [TedController::class, 'destroy'])->name('ted.destroy');
+});
+
+
+Route::prefix('dossie')->group(function () {
+    Route::get('/create', [DossieController::class, 'create'])->name('dossie.create');
+    Route::get('/', [DossieController::class, 'index'])->name('dossie.index');
+    Route::get('{id}', [DossieController::class, 'show'])->name('dossie.show');
+    Route::post('/', [DossieController::class, 'store'])->name('dossie.store');
+    Route::put('{id}', [DossieController::class, 'update'])->name('dossie.update');
+    Route::delete('{id}', [DossieController::class, 'destroy'])->name('dossie.destroy');
+});
 
 
 

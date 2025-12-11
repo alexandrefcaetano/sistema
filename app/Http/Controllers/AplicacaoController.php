@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 class AplicacaoController extends Controller
 {
     /**
-     * Serviço responsável pelas operações de Role (aplicacao).
+     * Serviço responsável pelas operações de Aplicação (aplicacao).
      *
      * @var AplicacaoService
      */
@@ -36,6 +36,7 @@ class AplicacaoController extends Controller
         // Obtém a lista paginada de módulos
         $aplicaceos = $this->aplicacao->listPaginated($perPage);
 
+      //  dd($aplicaceos);
         // Mantém o parâmetro "per_page" nos links da paginação
         $aplicaceos->appends(['per_page' => $perPage]);
 

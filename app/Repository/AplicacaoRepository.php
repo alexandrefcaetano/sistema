@@ -28,7 +28,7 @@ class AplicacaoRepository
 
     public function paginate(int $perPage = 15)
     {
-        return Aplicacao::with(['teds.valores','anexos','complementos','status'])->paginate($perPage);
+        return $this->model->orderBy('cd_aplicacao', 'desc')->paginate($perPage);
     }
 
     public function find(int $id)

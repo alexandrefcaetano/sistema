@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use App\Traits\Auditavel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class ValorTed extends Model
+class TedValor extends Model
 {
-    protected $table = 'tb_valor_ted';
+    use Auditavel;
+    protected $table = 'tb_ted_valores';
     protected $primaryKey = 'cd_valor_ted';
     public $timestamps = false;
 
-    protected $fillable = ['cd_valor_ted', 'cd_ted', 'vl_ted'];
+    protected $fillable = ['cd_valor_ted', 'cd_ted', 'vlr_ted'];
 
     public function ted()
     {
-        return $this->belongsTo(Ted::class, 'cd_ted');
+        return $this->belongsTo(Ted::class, 'cd_ted', 'cd_ted');
     }
 }

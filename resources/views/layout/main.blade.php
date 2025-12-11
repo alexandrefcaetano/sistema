@@ -642,6 +642,6 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.18.3/bootstrap-table-locale-all.min.js"></script>
 
-
+<script src="{{ asset('js/default.js')}}" type="text/javascript"></script>
 
 @yield('scripts')

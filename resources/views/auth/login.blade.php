@@ -296,8 +296,8 @@ License: You must have a valid license purchased only from themeforest(the above
 <script>
     $(document).ready(function() {
         // Preencher inputs de texto
-        $('input[name="cpf"]').val('36979483386');
-        $('input[name="password"]').val('123456');
+        $('input[name="cpf"]').val('70273553100');
+        $('input[name="password"]').val('BRB@2025');
 
     });
 

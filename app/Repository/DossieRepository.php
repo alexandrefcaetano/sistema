@@ -4,11 +4,11 @@ namespace App\Repository;
 
 use App\Models\Ted;
 
-class TedRepository
+class DossieRepository
 {
     protected $model;
 
-    public function __construct(Ted $model)
+    public function __construct(Dossie $model)
     {
         $this->model = $model;
     }

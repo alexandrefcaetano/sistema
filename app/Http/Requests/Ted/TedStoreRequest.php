@@ -11,10 +11,11 @@ class TedStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cd_solicitacao' => 'required|integer',
-            'nr_agencia' => 'required|integer',
+            'cd_dependencia' => 'required|integer',
             'nr_conta' => 'required|string',
-            'dt_emissao' => 'nullable|date'
+            'dt_emissao' => 'nullable|date',
+            'nr_telefone' => 'nullable',
+            'ds_obs'  => 'nullable',
         ];
     }
 }
