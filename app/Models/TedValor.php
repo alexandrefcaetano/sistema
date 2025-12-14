@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class TedValor extends Model
 {
     use Auditavel;
-    protected $table = 'tb_ted_valores';
+    protected $table = 'tb_valores_ted';
     protected $primaryKey = 'cd_valor_ted';
     public $timestamps = false;
 

@@ -159,6 +159,28 @@ function money_to_float($value)
     return (float) $value;
 }
 
+function normalizeMoney($value): string
+{
+    if ($value === null || $value === '') {
+        return '0.00';
+    }
+
+    // remove espaços
+    $value = trim($value);
+
+    // se tiver vírgula, ela é decimal (pt-BR)
+    if (str_contains($value, ',')) {
+        $value = str_replace('.', '', $value); // remove milhar
+        $value = str_replace(',', '.', $value);
+    }
+
+    // agora é número válido
+    $number = (float) $value;
+
+    // sempre com 2 casas
+    return number_format($number, 2, '.', '');
+}
+
 /*
 |--------------------------------------------------------------------------
 | STRINGS

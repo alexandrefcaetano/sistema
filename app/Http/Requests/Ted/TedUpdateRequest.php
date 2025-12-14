@@ -11,10 +11,19 @@ class TedUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cd_solicitacao' => 'nullable|integer',
-            'nr_agencia' => 'nullable|integer',
-            'nr_conta' => 'nullable|string',
-            'dt_emissao' => 'nullable|date'
+            'cd_dependencia' => 'required|integer',
+            'nr_conta' => 'required|string',
+            'dt_emissao' => 'required|date',
+            'nr_telefone' => 'nullable',
+            'ds_obs'  => 'nullable',
+            'no_unidade'  => 'nullable',
+            'vlr_total'  => 'required',
+            'nr_agencia'  => 'required',
+            'cd_status'  => 'required',
+
+            // 🔥 ESSENCIAL
+            'vlr_ted'               => 'required|array|min:1',
+
         ];
     }
 }

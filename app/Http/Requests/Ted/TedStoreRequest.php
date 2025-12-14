@@ -13,9 +13,16 @@ class TedStoreRequest extends FormRequest
         return [
             'cd_dependencia' => 'required|integer',
             'nr_conta' => 'required|string',
-            'dt_emissao' => 'nullable|date',
+            'dt_emissao' => 'required|date',
             'nr_telefone' => 'nullable',
             'ds_obs'  => 'nullable',
+            'no_unidade'  => 'nullable',
+            'vlr_total'  => 'required',
+            'nr_agencia'  => 'required',
+
+            // 🔥 ESSENCIAL
+            'vlr_ted'               => 'required|array|min:1',
+            'vlr_ted.*.vlr'         => 'required|numeric|min:0.01',
         ];
     }
 }

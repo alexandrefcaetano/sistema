@@ -25,6 +25,21 @@ class Ted extends Model
         'dt_emissao',
         'vlr_total',
     ];
+
+    protected $casts = [
+        'dt_emissao' => 'datetime',
+    ];
+    protected function vlrTotal(): Attribute
+    {
+        return Attribute::make(
+        // exibição (opcional)
+            get: fn ($value) => number_format($value, 2, ',', '.'),
+
+            // persistência
+            set: fn ($value) => normalizeMoney($value),
+        );
+    }
+
     public function status()
     {
         return $this->belongsTo(Status::class, 'cd_status', 'cd_status');

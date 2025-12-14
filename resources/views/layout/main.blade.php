@@ -71,7 +71,7 @@
     <link href="{{ asset('assets/demo/default/skins/header/menu/light.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/demo/default/skins/brand/dark.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{ asset('assets/demo/default/skins/aside/dark.css')}}" rel="stylesheet" type="text/css" />
-
+    <link href="{{ asset('assets/default.css')}}" rel="stylesheet" type="text/css" />
     <!--end::Layout Skins -->
     <link rel="shortcut icon" href="{{ asset('assets/media/logos/favicon.ico')}}" />
 </head>

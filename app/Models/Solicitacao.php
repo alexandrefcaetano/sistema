@@ -31,7 +31,7 @@ class Solicitacao extends Model
     }
     public function complementos()
     {
-        return $this->hasMany(Complemento::class, 'cd_solicitacao', 'cd_solicitacao');
+        return $this->hasMany(Complemento::class, 'cd_solicitacao', 'cd_solicitacao')->orderBy('dt_complemento', 'desc');
     }
 
 }

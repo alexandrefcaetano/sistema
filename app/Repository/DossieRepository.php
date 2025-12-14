@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Models\Ted;
+use App\Models\Dossie;
 
 class DossieRepository
 {

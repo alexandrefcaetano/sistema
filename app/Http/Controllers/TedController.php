@@ -2,17 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Export\ExportarPlanilha;
 use App\Http\Requests\Ted\TedStoreRequest;
 use App\Http\Requests\Ted\TedUpdateRequest;
+use App\Models\Status;
 use App\Models\Ted;
 use App\Services\TedService;
 use Illuminate\Http\Request;
+use RelatorioTeds;
+
 
 class TedController extends Controller
 {
 
     /**
-     * Instância do serviço de ted.
+     * Instância do serviço de Ted.
      *
      * @var \App\Services\TedService
      */
@@ -25,7 +29,7 @@ class TedController extends Controller
     public function __construct(TedService $ted) {  $this->ted = $ted;}
 
     /**
-     * Exibe a lista paginada de ted.
+     * Exibe a lista paginada de Ted.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\View\View
@@ -33,10 +37,25 @@ class TedController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->input('per_page', 10);
-        $teds = $this->ted->listPaginated($perPage);
-        $teds->appends(['per_page' => $perPage]);
 
-        return view('ted.grid', compact('teds', 'perPage'));
+        // filtros vindos da tela
+        $filters = $request->only([
+            'cd_solicitacao',
+            'cd_dependencia',
+            'nr_conta',
+            'dt_emissao',
+            'cd_status',
+            'vlr_inicio',
+            'vlr_fim'
+        ]);
+
+        $teds = $this->ted->listPaginated($perPage, $filters);
+
+        $status = Status::whereIn('cd_status', [1, 2, 25, 26, 27, 28])->get();
+
+        $teds->appends($request->query());
+
+        return view('ted.grid', compact('teds', 'status', 'perPage'));
     }
 
     /**
@@ -47,36 +66,40 @@ class TedController extends Controller
     public function create()
     {
         $teds = new Ted();
-        return view('ted.form',compact( 'teds'));
+        $status = Status::whereIn('cd_status', [1, 2, 25, 26, 27, 28])->get();
+        return view('ted.form',compact( 'teds', 'status'));
     }
 
     /**
-     * Armazena um novo ted no banco de dados.
+     * Armazena um novo Ted no banco de dados.
      *
      * @param  \App\Http\Requests\TedStoreRequest  $request
      * @return \Illuminate\Http\RedirectResponse
      */
     public function store(TedStoreRequest $request)
     {
-        //dd($request);
         $this->ted->create($request->validated());
-        return redirect()->back()->with('success', 'Função atualizada com sucesso!');
+        return redirect()
+            ->route('ted.index')
+            ->with('success', 'Teds criado com sucesso!');
     }
 
     /**
-     * Exibe os detalhes de um usuário específico.
+     * Exibe os detalhes de um Ted específico.
      *
      * @param  int  $id
      * @return string
      */
     public function show($id)
     {
-        $user = $this->ted->getById($id);
-        return view('ted.partial._visualizar', compact('user'))->render();
+        $teds = $this->ted->getById($id);
+        $status = Status::whereIn('cd_status', [1, 2, 25, 26, 27, 28])->get();
+        return view('ted.partial._visualizar', compact('teds','status'))->render();
+
     }
 
     /**
-     * Exibe o formulário para editar um usuário existente.
+     * Exibe o formulário para editar um Ted existente.
      *
      * @param  int  $id
      * @return \Illuminate\View\View
@@ -84,11 +107,12 @@ class TedController extends Controller
     public function edit($id)
     {
         $teds= $this->ted->getById($id);
-        return view('ted.form', compact('teds'));
+        $status = Status::whereIn('cd_status', [1, 2, 25, 26, 27, 28])->get();
+        return view('ted.form', compact('teds','status'));
     }
 
     /**
-     * Atualiza os dados de um usuário existente.
+     * Atualiza os dados de um Ted existente.
      *
      * @param  \App\Http\Requests\TedUpdateRequest  $request
      * @param  int  $id
@@ -96,13 +120,13 @@ class TedController extends Controller
      */
     public function update(TedUpdateRequest $request, $id)
     {
+
         $this->ted->update($id, $request->validated());
-        return redirect()->route('ted.index')->with('success', 'Ted atualizado com sucesso!');
-        //return redirect()->back()->with('success', 'Usuário atualizado com sucesso!');
+        return redirect()->route('ted.index')->with('success', 'Teds atualizado com sucesso!');
     }
 
     /**
-     * Marca um usuário como excluído (exclusão lógica).
+     * Marca um Ted como excluído (exclusão lógica).
      *
      * @param  int  $id
      * @return \Illuminate\Http\RedirectResponse
@@ -111,6 +135,43 @@ class TedController extends Controller
     {
         $this->ted->delete($id);
         return redirect()->back()->with('success', 'Ted removido com sucesso!');
+    }
+
+    /**
+     * Atualiza os dados de um Ted existente pelo modal.
+     *
+     * @param  \App\Http\Requests\TedUpdateRequest  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function atualizar(Request $request, $cd_ted)
+    {
+        $this->ted->atualizar($cd_ted, $request->only([
+            'cd_status',
+            'ds_obs'
+        ]));
+
+        return response()->json(['ok' => true]);
+    }
+
+
+    public function export(Request $request)
+    {
+        // OUTRAS LÓGICAS DO CONTROLLER CONTINUAM AQUI
+
+        $relatorio = new RelatorioTeds();
+
+        $dados = $relatorio->getDados([
+            'inicio' => $request->inicio,
+            'fim'    => $request->fim,
+        ]);
+
+        $exportador = new ExportarPlanilha(
+            'Relatorio_Teds',
+            $dados
+        );
+
+        return $exportador->export($request->formato ?? 'xlsx');
     }
 
 }

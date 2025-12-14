@@ -100,10 +100,12 @@ Route::prefix('json')->group(function () {
 Route::prefix('ted')->group(function () {
     Route::get('/create', [TedController::class, 'create'])->name('ted.create');
     Route::get('/', [TedController::class, 'index'])->name('ted.index');
-    Route::get('{id}', [TedController::class, 'show'])->name('ted.show');
+    Route::get('/{id}', [TedController::class, 'show'])->name('ted.show');
     Route::post('/', [TedController::class, 'store'])->name('ted.store');
-    Route::put('{id}', [TedController::class, 'update'])->name('ted.update');
+    Route::get('/edit/{id}', [TedController::class, 'edit'])->name('ted.edit');
+    Route::put('/{cd_ted}', [TedController::class, 'update'])->name('ted.update');
     Route::delete('{id}', [TedController::class, 'destroy'])->name('ted.destroy');
+    Route::post('/atualizar/{cd_ted}', [TedController::class, 'atualizar'])->name('ted.atualizar');
 });
 
 
@@ -112,8 +114,10 @@ Route::prefix('dossie')->group(function () {
     Route::get('/', [DossieController::class, 'index'])->name('dossie.index');
     Route::get('{id}', [DossieController::class, 'show'])->name('dossie.show');
     Route::post('/', [DossieController::class, 'store'])->name('dossie.store');
+    Route::get('/edit/{id}', [DossieController::class, 'edit'])->name('dossie.edit');
     Route::put('{id}', [DossieController::class, 'update'])->name('dossie.update');
     Route::delete('{id}', [DossieController::class, 'destroy'])->name('dossie.destroy');
+    Route::post('/atualizar/{cd_ted}', [DossieController::class, 'atualizar'])->name('dossie.atualizar');
 });
 
 

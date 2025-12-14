@@ -5,12 +5,12 @@
         <!-- begin:: Subheader -->
         <div class="kt-subheader   kt-grid__item" id="kt_subheader">
             <div class="kt-subheader__main">
-                <h3 class="kt-subheader__title"> Empty Page </h3>
+                <h3 class="kt-subheader__title"> Dashboard </h3>
                 <span class="kt-subheader__separator kt-hidden"></span>
                 <div class="kt-subheader__breadcrumbs">
                     <a href="#" class="kt-subheader__breadcrumbs-home"><i class="flaticon2-shelter"></i></a>
                     <span class="kt-subheader__breadcrumbs-separator"></span>
-                    <a href="" class="kt-subheader__breadcrumbs-link"> Aplicacões </a>
+                    <a href="" class="kt-subheader__breadcrumbs-link"> Teds </a>
                 </div>
             </div>
         </div>
@@ -24,7 +24,7 @@
                             <i class="kt-font-brand flaticon2-line-chart"></i>
                         </span>
                             <h3 class="kt-portlet__head-title">
-                                Lista de Aplicaceos
+                                Lista de Teds
                             </h3>
                         </div>
                         <div class="kt-portlet__head-toolbar">
@@ -33,15 +33,101 @@
 {{--                                    @can('Module.create')--}}
                                     <a href="{{ route('ted.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
-                                        Nova Aplicaçao
+                                        Novo Teds
                                     </a>
 {{--                                    @endcan--}}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    @php
+                        $hasFilters = request()->except(['page', 'per_page']) !== [];
+                    @endphp
                     <div class="kt-portlet__body">
                         <div class="kt-section">
+                            <div class="kt-portlet ">
+                                <div class="kt-portlet__body">
+                                    <!--begin::Accordion-->
+                                    <div class="accordion accordion-solid accordion-toggle-plus" id="accordionExample6">
+                                        <div class="card">
+                                            <div class="card-header" id="headingOne6">
+                                                <div class="card-title " data-toggle="collapse" data-target="#collapseOne6" aria-expanded="false" aria-controls="collapseOne6">
+                                                    <i class="fab fa-sistrix"></i> Pesquisa
+                                                </div>
+                                            </div>
+                                            <div id="collapseOne6" class="collapse {{ $hasFilters ? 'show' : '' }}" aria-labelledby="headingOne6" data-parent="#accordionExample6">
+                                                <div class="card-body">
+
+                                                    <form method="GET" action="{{ route('ted.index') }}">
+                                                        <div class="form-group row">
+                                                            <div class="col-lg-2">
+                                                                <label>Solicitação:</label>
+                                                                <input type="text" name="cd_solicitacao" id="cd_solicitacao" class="form-control" placeholder="Numero da Solicitação"  value="{{ request('cd_solicitacao') }} " >
+                                                                <span class="form-text text-muted">Numero da Solicitação.</span>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <label>Cod Dependencia:</label>
+                                                                <input type="text" name="cd_dependencia" id="cd_dependencia" class="form-control" placeholder="Numero Dependencia"  value="{{ request('cd_dependencia') }}" >
+                                                                <span class="form-text text-muted">Numero da Dependencia.</span>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <label>Conta:</label>
+                                                                <input type="text" name="nr_conta" id="nr_conta" class="form-control"  placeholder="Conta"  value="{{ request('nr_conta')}}" >
+                                                                <span class="form-text text-muted">Informe a Conta.</span>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label class="">Data Emissão:</label>
+                                                                <input type="text" name="dt_emissao" class="form-control" id="kt_datepicker_1" value="{{ request('dt_emissao') }}"  readonly placeholder="Select date" />
+                                                                <span class="form-text text-muted">Data Emissão.</span>
+                                                            </div>
+                                                            <div class="col-lg-3">
+                                                                <label>Status:</label>
+                                                                <div class="form-group">
+                                                                    <select class="form-control" id="status" name="cd_status">
+                                                                        <option value="">Selecione...</option>
+                                                                        @foreach($status as $st)
+                                                                            <option value="{{ $st->cd_status }}"
+                                                                                {{ request('cd_status') == $st->cd_status ? 'selected' : '' }}>
+                                                                                {{ $st->no_status }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <span class="form-text text-muted">Status.</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <div class="col-lg-2">
+                                                                <label>Valor Total Inicial:</label>
+                                                                <input type="text" name="vlr_inicio" id="vlr_inicio" class="form-control" placeholder="Numero da Solicitação"  value="{{ request('vlr_inicio') }}" >
+                                                                <span class="form-text text-muted">Valor Inicio.</span>
+                                                            </div>
+                                                            <div class="col-lg-2">
+                                                                <label>Valor Total Final:</label>
+                                                                <input type="text" name="vlr_fim" id="vlr_fim" class="form-control" placeholder="Numero da Solicitação"  value="{{ request('vlr_fim') }}" >
+                                                                <span class="form-text text-muted">Valor Fim.</span>
+                                                            </div>
+                                                        </div>
+                                                        <hr>
+                                                        <div class="form-group row">
+                                                            <a href="{{ route('ted.index') }}" class="btn btn-warning ml-2">
+                                                                Limpar
+                                                            </a>
+
+                                                            <button type="submit" class="btn btn-success ml-4" id="btn-pesquisar">
+                                                                Pesquisar
+                                                            </button>
+                                                        </div>
+                                                    </form>
+
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!--end::Accordion-->
+                                </div>
+                            </div>
                             <div class="kt-section__content">
                                 <form method="GET" class="mb-3">
                                     <div class="form-inline">
@@ -69,11 +155,11 @@
                                     @foreach ($teds as $ted)
                                         <tr>
                                             <td>{{ $ted->cd_solicitacao }}</td>
-                                            <td>{{ $ted->total_ted }}</td>
+                                            <td>{{ format_number($ted->vlr_total) }}</td>
                                             <td>{{ $ted->no_unidade }}</td>
                                             <td>{{ $ted->nr_telefone }}</td>
                                             <td>{{ $ted->dt_emissao}}</td>
-                                            <td>{{ $ted->no_status_solicitacao }}</td>
+                                            <td>{{ $ted->status->no_status }}</td>
 
                                             <td>
                                                 @can('Module.update')
@@ -125,6 +211,13 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
 
+                        <button type="button" class="btn btn-warning" id="btn-editar">
+                            Editar
+                        </button>
+
+                        <button type="button" class="btn btn-success d-none" id="btn-atualizar">
+                            Salvar
+                        </button>
                     </div>
                 </div>
 
@@ -135,7 +228,46 @@
     @section('scripts')
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <script>
+            $(document).on('click', '#btn-editar', function () {
 
+                // troca status
+                $('#status-text').addClass('d-none');
+                $('#status-select').removeClass('d-none');
+
+                // mostra textarea
+                $('#obs-container').removeClass('d-none');
+
+                // troca botões
+                $('#btn-editar').addClass('d-none');
+                $('#btn-atualizar').removeClass('d-none');
+            });
+
+            $(document).on('click', '#btn-atualizar', function () {
+
+                const cdTed    = $('#cd_ted').val();
+                const cdStatus = $('#status-select').val();
+                const dsObs    = $('#ds_obs').val();
+
+                $.ajax({
+                    url: '/ted/atualizar/' + cdTed,
+                    type: 'POST',
+                    data: {
+                        _token: $('meta[name="csrf-token"]').attr('content'),
+                        cd_status: cdStatus,
+                        ds_obs: dsObs
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        $('#visualizar').modal('hide');
+                        location.reload();
+                    },
+                    error: function (xhr) {
+                        console.error(xhr.status);
+                        console.error(xhr.responseText);
+                        alert('Erro ao atualizar');
+                    }
+                });
+            });
 
             $(document).on('click', '.visualizar-modulo', function (e) {
                 e.preventDefault();
@@ -147,7 +279,6 @@
                 // Mostra o modal e indica que está carregando
                 modal.modal('show');
                 modalBody.html('<div class="text-center p-3">Carregando...</div>');
-
                 $.ajax({
                     url: url,
                     type: 'GET',
@@ -203,5 +334,6 @@
             });
             @endif
         </script>
+        <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/bootstrap-datepicker.js') }}" type="text/javascript"></script>
     @endsection
 

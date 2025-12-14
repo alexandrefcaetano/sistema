@@ -23,7 +23,9 @@ class Complemento extends Model
         'cd_status',
     ];
 
-
+    protected $casts = [
+        'dt_complemento' => 'datetime',
+    ];
     public function status()
     {
         return $this->belongsTo(Status::class, 'cd_status', 'cd_status');
@@ -32,5 +34,10 @@ class Complemento extends Model
     public function solicitacao()
     {
         return $this->belongsTo(Solicitacao::class, 'cd_solicitacao', 'cd_solicitacao');
+    }
+
+    public function usuario()
+    {
+        return $this->belongsTo(Usuario::class, 'nr_matricula', 'nr_matricula');
     }
 }

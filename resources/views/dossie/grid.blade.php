@@ -57,12 +57,14 @@
                                     <thead>
                                     <tr>
                                         <th>Solicitação</th>
-                                        <th>Total Vlr. </th>
                                         <th>Dependencia</th>
-                                        <th>Telefone</th>
-                                        <th>Data Emissão</th>
+                                        <th>Conta</th>
+                                        <th>Destino</th>
+                                        <th>Tipo de Documento</th>
+                                        <th>Aberta em </th>
+                                        <th>data Atualização</th>
                                         <th>Status</th>
-                                        <th>Ações</th>
+                                        <th>ações</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -70,25 +72,27 @@
                                         <tr>
                                             <td>{{ $dossie->cd_solicitacao }}</td>
                                             <td>{{ $dossie->total_ted }}</td>
-                                            <td>{{ $dossie->no_unidade }}</td>
-                                            <td>{{ $dossie->nr_telefone }}</td>
-                                            <td>{{ $dossie->dt_emissao}}</td>
+
+                                            <td>{{ $dossie->nr_conta }}</td>
+                                            <td>{{ $dossie->ds_dossie_destino }}</td>
+                                            <td>{{ $dossie->no_tipo_documento_dossie}}</td>
+
                                             <td>{{ $dossie->no_status_solicitacao }}</td>
 
                                             <td>
                                                 @can('Module.update')
-                                                <a href="{{ route('ted.edit', $dossie->cd_ted) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                <a href="{{ route('ted.edit', $dossie->sq_dossie) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
                                                     <i class="flaticon-edit"></i>
                                                 </a>
                                                 @endcan
                                                 @can('Module.list')
-                                                <a href="{{ route('ted.show', $dossie->cd_ted) }}"
+                                                <a href="{{ route('ted.show', $dossie->sq_dossie) }}"
                                                    class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
                                                     <i class="flaticon2-search-1"></i>
                                                 </a>
                                                 @endcan
                                                 @can('Module.delete')
-                                                    <form action="{{ route('ted.destroy', $dossie->cd_ted) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('ted.destroy', $dossie->sq_dossie) }}" method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >

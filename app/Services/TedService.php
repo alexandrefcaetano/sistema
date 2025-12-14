@@ -45,12 +45,13 @@ class TedService
      */
     public function create(array $data)
     {
+
         return DB::transaction(function () use ($data) {
 
             /** ---------------------------------------------------
              * 1. Criar a Solicitação
              * ---------------------------------------------------*/
-            $solicitacaoData = ['cd_aplicacao'=> 1];
+            $solicitacaoData = ['cd_aplicacao'=> 3];
             // cria solicitacao pelo repository correto
             $solicitacao = $this->solicitacao->create($solicitacaoData);
 
@@ -61,7 +62,7 @@ class TedService
 
                 $comp = [
                     'cd_solicitacao'        => $solicitacao->cd_solicitacao,
-                    'cd_status'             => $data['cd_status'],
+                    'cd_status'             => 1,
                     'nr_matricula'          => user()->nr_matricula,
                     'ds_obs'                => $data['ds_obs'],
                     'dt_complemento'        => now(),
@@ -74,24 +75,17 @@ class TedService
              * 3. Criar TED vinculado à solicitação
              * ---------------------------------------------------*/
 
-            // SOMA TODOS OS VALORES TED
-            $somatorio = 0;
-            if (!empty($data['vlr_ted'])) {
-                foreach ($data['vlr_ted'] as $valor) {
-                    $somatorio += floatval($valor['vlr_ted']);
-                }
-            }
 
             $dadosTed = [
                 'cd_solicitacao'    => $solicitacao->cd_solicitacao,
-                'cd_status'         => $data['cd_status'],
+                'cd_status'         => 1,
                 'cd_dependencia'    => $data['cd_dependencia'],
                 'nr_agencia'        => $data['nr_agencia'],
                 'no_unidade'        => $data['no_unidade'],
                 'nr_telefone'       => $data['nr_telefone'],
                 'nr_conta'          => $data['nr_conta'],
                 'dt_emissao'        => $data['dt_emissao'],
-                'vlr_total'         => $somatorio,
+                'vlr_total'         => normalizeMoney($data['vlr_total']),
             ];
 
             $ted = $this->repo->create($dadosTed);
@@ -103,7 +97,7 @@ class TedService
                 foreach ($data['vlr_ted'] as $valor) {
                     $dadosValor = [
                         'cd_ted'    => $ted->cd_ted,
-                        'vlr_ted'   => $valor['vlr_ted'],
+                        'vlr_ted'   => normalizeMoney($valor['vlr']),
                     ];
                     $this->valorTed->create($dadosValor);
                 }
@@ -128,26 +122,59 @@ class TedService
 
             $ted = $this->repo->find($id);
 
-            // 1. Atualiza TED
-            $ted->update($data['cd_status']);
+            /** ---------------------------------------------------
+             * 1. Atualizar TED
+             * ---------------------------------------------------*/
+            $dadosTed = [
+                'cd_status'      => $data['cd_status'],
+                'cd_dependencia' => $data['cd_dependencia'],
+                'nr_agencia'     => $data['nr_agencia'],
+                'no_unidade'     => $data['no_unidade'],
+                'nr_telefone'    => $data['nr_telefone'],
+                'nr_conta'       => $data['nr_conta'],
+                'dt_emissao'     => $data['dt_emissao'],
+                'vlr_total'      => normalizeMoney($data['vlr_total']),
+            ];
 
-            // 2. Atualiza complementos
-            if (!empty($data['ds_obs']) && !empty($ted->cd_solicitacao)) {
+            $ted = $this->repo->update($id, $dadosTed);
 
-                $comp = [
-                    'cd_solicitacao'        => $ted->cd_solicitacao,
-                    'cd_status'             => $data['cd_status'],
-                    'nr_matricula'          => user()->nr_matricula,
-                    'ds_obs'                => $data['ds_obs'],
-                    'dt_complemento'        => now(),
-                ];
-                $this->solicitacao->create($comp);
+            /** ---------------------------------------------------
+             * 2. Criar complemento (se houver)
+             * ---------------------------------------------------*/
+            if (!empty($data['ds_obs'])) {
+
+                $ted->solicitacao->complementos()->create([
+                    'cd_status'    => $data['cd_status'],
+                    'nr_matricula' => user()->nr_matricula,
+                    'ds_obs'       => $data['ds_obs'],
+                    'dt_complemento' => now(),
+                ]);
             }
 
+            /** ---------------------------------------------------
+             * 3. Atualizar valores do TED (CORRETO)
+             * ---------------------------------------------------*/
+            // 🔴 remove valores antigos
+            $ted->valores()->delete();
+
+            // 🟢 cria valores novos
+            if (!empty($data['vlr_ted'])) {
+                foreach ($data['vlr_ted'] as $valor) {
+
+                    if (empty($valor['vlr'])) {
+                        continue;
+                    }
+
+                    $ted->valores()->create([
+                        'vlr_ted' => normalizeMoney($valor['vlr']),
+                    ]);
+                }
+            }
 
             return $ted;
         });
     }
+
 
 
     /**
@@ -167,9 +194,9 @@ class TedService
      * @param  int  $perPage
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function listPaginated($perPage = 10)
+    public function listPaginated(int $perPage = 10, array $filters = [])
     {
-        return $this->repo->paginate($perPage);
+        return $this->repo->paginate($perPage, $filters);
     }
 
 }

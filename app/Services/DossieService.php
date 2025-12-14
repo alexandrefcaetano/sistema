@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Models\Solicitacao;
 use App\Models\TedValor;
-use App\Repository\TedRepository;
+use App\Repository\DossieRepository;
 use Illuminate\Support\Facades\DB;
 
 class DossieService
