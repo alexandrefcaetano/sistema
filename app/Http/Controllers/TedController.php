@@ -156,16 +156,19 @@ class TedController extends Controller
         return response()->json(['ok' => true]);
     }
 
-    public function export(Request $request, RelatorioTeds $relatorio)
+      public function export(Request $request, RelatorioTeds $relatorio)
     {
-        $filters = $request->except(['page']);
+        $filters = $request->except(['page', 'format']);
 
-        $dados = $relatorio->getDados($filters);
+        $dados = [
+            'Relatorio_Teds' => $relatorio->getDados($filters)
+        ];
 
         return (new ExportarPlanilha(
-            'Relatorio_Teds',
-            $dados
+            $dados,
+            resource_path('exports/modelos_relatorios/Relatorio_Usuarios_Prestadores.xlsx')
         ))->export($request->get('format', 'xlsx'));
     }
+
 
 }
