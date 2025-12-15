@@ -1,4 +1,7 @@
 <?php
+
+namespace App\Export\Relatorios;
+
 use App\Repository\TedRepository;
 
 class RelatorioTeds
@@ -7,6 +10,19 @@ class RelatorioTeds
         protected TedRepository $repository
     ) {}
 
+    /**
+     * Método público chamado pelo Controller
+     */
+    public function getDados(array $filters): array
+    {
+        return [
+            'Relatorio_Teds' => $this->dadosTeds($filters),
+        ];
+    }
+
+    /**
+     * Método interno (não acessível pelo controller)
+     */
     protected function dadosTeds(array $filters): array
     {
         $query = $this->repository->getQuery()
@@ -29,7 +45,7 @@ class RelatorioTeds
             ->join('tb_aplicacao', 'tb_aplicacao.cd_aplicacao', '=', 'tb_solicitacao.cd_aplicacao')
             ->where('tb_aplicacao.cd_aplicacao', 3);
 
-        // 🔑 AQUI ESTÁ O REAPROVEITAMENTO
+        // 🔁 reaproveita os filtros do repository
         $this->repository->applyFiltrosTed($query, $filters);
 
         return $query

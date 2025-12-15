@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Export\ExportarPlanilha;
+use App\Export\Relatorios\RelatorioTeds;
 use App\Http\Requests\Ted\TedStoreRequest;
 use App\Http\Requests\Ted\TedUpdateRequest;
 use App\Models\Status;
 use App\Models\Ted;
 use App\Services\TedService;
 use Illuminate\Http\Request;
-use RelatorioTeds;
+
+
 
 
 class TedController extends Controller
@@ -154,24 +156,16 @@ class TedController extends Controller
         return response()->json(['ok' => true]);
     }
 
-
-    public function export(Request $request)
+    public function export(Request $request, RelatorioTeds $relatorio)
     {
-        // OUTRAS LÓGICAS DO CONTROLLER CONTINUAM AQUI
+        $filters = $request->except(['page']);
 
-        $relatorio = new RelatorioTeds();
+        $dados = $relatorio->getDados($filters);
 
-        $dados = $relatorio->getDados([
-            'inicio' => $request->inicio,
-            'fim'    => $request->fim,
-        ]);
-
-        $exportador = new ExportarPlanilha(
+        return (new ExportarPlanilha(
             'Relatorio_Teds',
             $dados
-        );
-
-        return $exportador->export($request->formato ?? 'xlsx');
+        ))->export($request->get('format', 'xlsx'));
     }
 
 }

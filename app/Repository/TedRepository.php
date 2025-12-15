@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Models\Ted;
+use Illuminate\Database\Eloquent\Builder;
+use Carbon\Carbon;
 
 class TedRepository
 {

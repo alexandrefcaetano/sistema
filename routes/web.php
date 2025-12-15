@@ -106,6 +106,7 @@ Route::prefix('ted')->group(function () {
     Route::put('/{cd_ted}', [TedController::class, 'update'])->name('ted.update');
     Route::delete('{id}', [TedController::class, 'destroy'])->name('ted.destroy');
     Route::post('/atualizar/{cd_ted}', [TedController::class, 'atualizar'])->name('ted.atualizar');
+    Route::get('/ted/export', [TedController::class, 'export'])->name('ted.export');
 });
 
 

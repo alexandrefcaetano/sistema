@@ -41,3 +41,18 @@ $(document).on("blur", "#cd_dependencia", function () {
 $(".mask_celular").inputmask("mask", {
     "mask": "(99) 9999-9999"
 });
+
+function aplicarMascaraValor() {
+    $(".masc_valor").inputmask("decimal", {
+        radixPoint: ",",
+        groupSeparator: ".",
+        autoGroup: true,
+        digits: 2,
+        digitsOptional: false,
+        rightAlign: false
+    });
+}
+
+$(document).ready(function () {
+    aplicarMascaraValor();
+});

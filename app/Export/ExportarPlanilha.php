@@ -35,28 +35,36 @@ class ExportarPlanilha
      */
     public function export(string $formato = 'xlsx'): StreamedResponse
     {
+
+
         // Preenche as abas
         foreach ($this->dados as $aba => $linhas) {
+
+            // usa sempre a primeira aba
+            $sheet = $this->spreadsheet->getSheet(0);
+            $sheet->setTitle($aba);
+
+            // remove linhas vazias
+            $linhas = array_values(array_filter($linhas, function ($linha) {
+                return !empty(array_filter($linha, fn($v) => $v !== null));
+            }));
 
             if (empty($linhas)) {
                 continue;
             }
 
-            $start = $linhas[0]->start ?? 2;
-
-            foreach ($linhas as $linha) {
-                unset($linha->start);
-            }
-
-            $this->spreadsheet->setActiveSheetIndexByName($aba);
-            $sheet = $this->spreadsheet->getActiveSheet();
-
-            $sheet->fromArray(
-                json_decode(json_encode($linhas), true),
-                null,
-                'A' . $start
-            );
+            // Dados
+            $sheet->fromArray($linhas, null, 'A2');
         }
+
+// mantém a aba correta ativa
+        $this->spreadsheet->setActiveSheetIndex(0);
+
+//        dd([
+//            'aba' => $aba,
+//            'total_linhas' => count($linhas),
+//            'primeira_linha' => $linhas[0]
+//        ]);
 
         // Sempre abrir na primeira aba
         $this->spreadsheet->setActiveSheetIndex(0);

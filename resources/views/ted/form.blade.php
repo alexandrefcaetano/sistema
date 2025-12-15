@@ -122,7 +122,7 @@
                                         </div>
                                         <div class="form-group row">
 
-                                            <div class="col-md-4">
+                                            <div class="col-md-6">
                                                 <table class="table table-bordered" id="abilities-table">
                                                     <thead>
                                                     <tr>
@@ -141,7 +141,7 @@
                                                                 <td>
                                                                     <input type="text"
                                                                            name="vlr_ted[{{ $i }}][vlr]"
-                                                                           class="form-control valor-ted {{ $i === 0 ? 'valor-obrigatorio' : '' }}"
+                                                                           class="form-control masc_valor valor-ted {{ $i === 0 ? 'valor-obrigatorio' : '' }}"
                                                                            value="{{ old("vlr_ted.$i.vlr", $valor->vlr_ted) }}">
                                                                 </td>
                                                                 <td>
@@ -160,12 +160,12 @@
                                                     @else
 
                                                         <tr class="data-row">
-                                                            <td><input type="text" name="vlr_ted[0][vlr]" class="form-control valor-ted valor-obrigatorio" required></td>
+                                                            <td><input type="text" name="vlr_ted[0][vlr]" class="form-control valor-ted valor-obrigatorio masc_valor" required></td>
                                                             <td><button type="button" class="btn btn-icon btn-danger remove-vlr"><i class="la la-trash"></i></button></td>
                                                         </tr>
 
                                                         <tr class="total-row">
-                                                            <td style="font-size: 16px; font-weight: bold">Valor total:</td>
+                                                            <td width="70%" style="font-size: 16px; font-weight: bold">Valor total:</td>
                                                             <td class="valor-total"  style="font-size: 16px; font-weight: bold">0,00</td>
                                                         </tr>
 
@@ -242,7 +242,7 @@
                     <tr class="data-row">
                         <td>
                             <input type="text" name="vlr_ted[${rowCount}][vlr]"
-                                   class="form-control valor-ted">
+                                   class="form-control valor-ted masc_valor">
                         </td>
                         <td>
                             <button type="button" class="btn btn-icon btn-danger remove-vlr">
@@ -254,7 +254,7 @@
 
                 // insere antes do total
                 table.find("tr.total-row").before(newRow);
-
+                aplicarMascaraValor();
                 calcularTotal();
             });
 
