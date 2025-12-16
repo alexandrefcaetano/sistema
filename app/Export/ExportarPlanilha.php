@@ -10,7 +10,6 @@ use PhpOffice\PhpSpreadsheet\Writer\Csv;
 use PhpOffice\PhpSpreadsheet\Writer\Pdf\Dompdf;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
-
 class ExportarPlanilha
 {
     protected array $dados;
@@ -19,55 +18,41 @@ class ExportarPlanilha
 
     public function __construct(string $modelo, array $dados)
     {
-        $this->dados   = $dados;
-        $this->modelo  = $modelo;
+        $this->dados  = $dados;
+        $this->modelo = $modelo;
 
         $path = resource_path("exports/modelos_relatorios/{$modelo}.xlsx");
 
         if (!file_exists($path)) {
-            throw new \Exception("Modelo {$modelo} não encontrado");
+            throw new \Exception("Modelo {$modelo} não encontrado em {$path}");
         }
 
         $this->spreadsheet = IOFactory::load($path);
     }
 
-    /**
-     * Exportação genérica
-     */
     public function export(string $formato = 'xlsx'): StreamedResponse
     {
+
+
         foreach ($this->dados as $aba => $linhas) {
 
             $sheet = $this->spreadsheet->getSheet(0);
             $sheet->setTitle($aba);
-
-            // remove linhas vazias
-            $linhas = array_values(array_filter($linhas, function ($linha) {
-                return !empty(array_filter($linha, fn($v) => $v !== null && $v !== ''));
-            }));
-
-            if (empty($linhas)) {
-                continue;
+            $linhas = $this->prepararLinhas($linhas);
+            // começa na linha 2 (cabeçalho já existe)
+            if (!empty($linhas)) {
+                $sheet->fromArray($linhas, null, 'A2', true);
             }
 
-            // começa na linha 2 (cabeçalho já existe)
-            $sheet->fromArray($linhas, null, 'A2', true);
-
-            // 🔹 ajuste visual para PDF
+            // ajustes para PDF
             $sheet->getPageSetup()
                 ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
                 ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
 
-            $sheet->getPageMargins()->setTop(0.5);
-            $sheet->getPageMargins()->setRight(0.3);
-            $sheet->getPageMargins()->setLeft(0.3);
-            $sheet->getPageMargins()->setBottom(0.5);
-
-            // quebra de página automática
             $sheet->setShowGridlines(false);
         }
 
-        $this->spreadsheet->setActiveSheetIndex(0);
+
 
         $writer = match ($formato) {
             'xlsx' => new Xlsx($this->spreadsheet),
@@ -89,8 +74,29 @@ class ExportarPlanilha
         );
     }
 
-    protected function nomeArquivo(): string
+    protected function nomeArquivo(string $formato): string
     {
-        return $this->modelo . '_' . now()->format('Ymd_His') . '.xlsx';
+        return $this->modelo . '_' . now()->format('Ymd_His') . '.' . $formato;
+    }
+    protected function prepararLinhas(array $linhas): array
+    {
+        $linhas = array_values(array_filter($linhas));
+        return array_map(function ($linha) {
+            return [
+                $linha['no_aplicacao'] ?? '',
+                $linha['cd_solicitacao'] ?? '',
+                $linha['cd_dependencia'] ?? '',
+                $linha['no_unidade'] ?? '',
+                $linha['nr_conta'] ?? '',
+                $linha['nr_agencia'] ?? '',
+                $linha['nr_telefone'] ?? '',
+                $linha['dt_emissao'] ?? '',
+                $linha['vlr_total'] ?? '',
+                $linha['nr_matricula_create'] ?? '',
+                $linha['dt_create'] ?? '',
+                $linha['nr_matricula_atualizacao'] ?? '',
+                $linha['dt_update'] ?? '',
+            ];
+        }, $linhas);
     }
 }

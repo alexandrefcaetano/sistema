@@ -10,6 +10,8 @@ use App\Models\Status;
 use App\Models\Ted;
 use App\Services\TedService;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade\Pdf;
+
 
 
 
@@ -160,15 +162,44 @@ class TedController extends Controller
     {
         $filters = $request->except(['page', 'format']);
 
-        $dados = [
-            'Relatorio_Teds' => $relatorio->getDados($filters)
-        ];
+        $dados = $relatorio->getDados($filters);
 
         return (new ExportarPlanilha(
-            $dados,
-            resource_path('exports/modelos_relatorios/Relatorio_Usuarios_Prestadores.xlsx')
+            'Relatorio_Teds',
+            $dados
         ))->export($request->get('format', 'xlsx'));
     }
+
+
+    public function relatorioTedsPdf(Request $request, RelatorioTeds $relatorio)
+    {
+        $filters = $request->except(['page', 'format']);
+
+        $dados = $relatorio->getDados($filters);
+
+        // 🔥 EXTRAÇÃO CORRETA
+        if (
+            !is_array($dados) ||
+            !array_key_exists('Relatorio_Teds', $dados) ||
+            empty($dados['Relatorio_Teds'])
+        ) {
+            dd('ARRAY INVALIDO OU VAZIO', $dados);
+        }
+
+        $linhas = $dados['Relatorio_Teds'];
+
+        $pdf = Pdf::loadView(
+            'ted.pdf.exportacao_pdf',
+            compact('linhas')
+        )->setPaper('a4', 'landscape');
+
+        return $pdf->stream(
+            'Relatorio_Teds_' . now()->format('Ymd_His') . '.pdf'
+        );
+    }
+
+
+
 
 
 }

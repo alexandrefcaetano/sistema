@@ -164,7 +164,7 @@
                                                                         </li>
                                                                         <li class="kt-nav__item">
                                                                             <a
-                                                                                href="{{ route('ted.export', array_merge(request()->query(), ['format' => 'pdf'])) }}"
+                                                                                href="{{ route('ted.relatorio.pdf', request()->query()) }}"
                                                                                 class="kt-nav__link"
                                                                             >
                                                                                 <i class="kt-nav__link-icon la la-file-pdf-o"></i>
