@@ -291,3 +291,13 @@ CREATE TABLE frm.tb_dossie_status (
 
 CREATE INDEX idx_tb_dossie_status_sq_dossie
     ON frm.tb_dossie_status (sq_dossie);
+
+
+
+
+
+create table vw_empresa_dependente
+(
+    cd_dependencia integer,
+    nm_dependencia varchar(255)
+);

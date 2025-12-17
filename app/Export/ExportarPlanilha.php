@@ -34,22 +34,22 @@ class ExportarPlanilha
     {
 
 
-        foreach ($this->dados as $aba => $linhas) {
+        $index = 0;
 
-            $sheet = $this->spreadsheet->getSheet(0);
+        foreach ($this->dados as $aba => $linhas) {
+            $sheet = $index === 0
+                ? $this->spreadsheet->getSheet(0)
+                : $this->spreadsheet->createSheet($index);
+
             $sheet->setTitle($aba);
+
             $linhas = $this->prepararLinhas($linhas);
-            // começa na linha 2 (cabeçalho já existe)
+
             if (!empty($linhas)) {
                 $sheet->fromArray($linhas, null, 'A2', true);
             }
 
-            // ajustes para PDF
-            $sheet->getPageSetup()
-                ->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE)
-                ->setPaperSize(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::PAPERSIZE_A4);
-
-            $sheet->setShowGridlines(false);
+            $index++;
         }
 
 
@@ -80,7 +80,6 @@ class ExportarPlanilha
     }
     protected function prepararLinhas(array $linhas): array
     {
-        $linhas = array_values(array_filter($linhas));
         return array_map(function ($linha) {
             return [
                 $linha['no_aplicacao'] ?? '',

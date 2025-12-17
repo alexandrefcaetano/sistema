@@ -173,17 +173,16 @@ class TedController extends Controller
 
     public function relatorioTedsPdf(Request $request, RelatorioTeds $relatorio)
     {
-        $filters = $request->except(['page', 'format']);
+        $filters = $request->except(['page', 'format', 'mode']);
 
         $dados = $relatorio->getDados($filters);
 
-        // 🔥 EXTRAÇÃO CORRETA
         if (
             !is_array($dados) ||
             !array_key_exists('Relatorio_Teds', $dados) ||
             empty($dados['Relatorio_Teds'])
         ) {
-            dd('ARRAY INVALIDO OU VAZIO', $dados);
+            abort(404, 'Nenhum dado encontrado para o relatório');
         }
 
         $linhas = $dados['Relatorio_Teds'];
@@ -193,10 +192,21 @@ class TedController extends Controller
             compact('linhas')
         )->setPaper('a4', 'landscape');
 
-        return $pdf->stream(
-            'Relatorio_Teds_' . now()->format('Ymd_His') . '.pdf'
-        );
+        $nome = 'Relatorio_Teds_' . now()->format('Ymd_His') . '.pdf';
+
+        $mode = $request->get('mode', 'print');
+
+
+        if ($mode === 'download') {
+            return $pdf->download($nome);
+        }
+
+        return view('ted.pdf.exportacao_pdf', compact('linhas'));
+
     }
+
+
+
 
 
 

@@ -132,15 +132,13 @@
                                                                 <div class="dropdown-menu dropdown-menu-right">
                                                                     <ul class="kt-nav">
                                                                         <li class="kt-nav__item">
-                                                                            <a href="#" class="kt-nav__link">
+                                                                            <a
+                                                                                href="{{ route('ted.relatorio.pdf', array_merge(request()->query(), ['mode' => 'print'])) }}"
+                                                                                target="_blank"
+                                                                                class="kt-nav__link"
+                                                                            >
                                                                                 <i class="kt-nav__link-icon la la-print"></i>
                                                                                 <span class="kt-nav__link-text">Print</span>
-                                                                            </a>
-                                                                        </li>
-                                                                        <li class="kt-nav__item">
-                                                                            <a href="#" class="kt-nav__link">
-                                                                                <i class="kt-nav__link-icon la la-copy"></i>
-                                                                                <span class="kt-nav__link-text">Copy</span>
                                                                             </a>
                                                                         </li>
                                                                         <li class="kt-nav__item">
@@ -164,8 +162,9 @@
                                                                         </li>
                                                                         <li class="kt-nav__item">
                                                                             <a
-                                                                                href="{{ route('ted.relatorio.pdf', request()->query()) }}"
+                                                                                href="{{ route('ted.relatorio.pdf', array_merge(request()->query(), ['mode' => 'download'])) }}"
                                                                                 class="kt-nav__link"
+                                                                                target="_blank"
                                                                             >
                                                                                 <i class="kt-nav__link-icon la la-file-pdf-o"></i>
                                                                                 <span class="kt-nav__link-text">PDF</span>
