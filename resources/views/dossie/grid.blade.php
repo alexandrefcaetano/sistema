@@ -1,4 +1,4 @@
-@extends('layout/main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -30,12 +30,13 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
-{{--                                    @can('Module.create')--}}
-                                    <a href="{{ route('dossie.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    {{--                                    @can('Module.create')--}}
+                                    <a href="{{ route('dossie.create') }}"
+                                       class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Novo Dossie
                                     </a>
-{{--                                    @endcan--}}
+                                    {{--                                    @endcan--}}
                                 </div>
                             </div>
                         </div>
@@ -46,22 +47,37 @@
                                 <form method="GET" class="mb-3">
                                     <div class="form-inline">
                                         <label for="per_page" class="mr-2">Registros por página:</label>
-                                        <select name="per_page" id="per_page" class="form-control form-control-sm" onchange="this.form.submit()">
+                                        <select name="per_page" id="per_page" class="form-control form-control-sm"
+                                                onchange="this.form.submit()">
                                             @foreach ([10, 20, 50, 100] as $size)
-                                                <option value="{{ $size }}" {{ $perPage == $size ? 'selected' : '' }}>{{ $size }}</option>
+                                                <option
+                                                    value="{{ $size }}" {{ $perPage == $size ? 'selected' : '' }}>{{ $size }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </form>
-                                <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap">
+                                <table
+                                    class="table table-striped- table-bordered table-hover table-checkable table-responsive no-wrap">
+                                    <colgroup>
+                                        <col style="width: 3%">
+                                        <col style="width: 10%">
+                                        <col style="width: 5%">
+                                        <col style="width: 16%">
+                                        <col style="width: 16%">
+                                        <col style="width: 12%">
+                                        <col style="width: 12%">
+                                        <col style="width: 8%">
+                                        <col style="width: 8%">
+                                    </colgroup>
+
                                     <thead>
                                     <tr>
                                         <th>Solicitação</th>
-                                        <th>Dependencia</th>
+                                        <th>CPF / CNPJ</th>
                                         <th>Conta</th>
                                         <th>Destino</th>
                                         <th>Tipo de Documento</th>
-                                        <th>Aberta em </th>
+                                        <th>Aberta em</th>
                                         <th>data Atualização</th>
                                         <th>Status</th>
                                         <th>ações</th>
@@ -71,31 +87,34 @@
                                     @foreach ($dossies as $dossie)
                                         <tr>
                                             <td>{{ $dossie->cd_solicitacao }}</td>
-                                            <td>{{ $dossie->total_ted }}</td>
-
+                                            <td>{{ cpf_cnpj($dossie->dn_cpf_cnpj) }}</td>
                                             <td>{{ $dossie->nr_conta }}</td>
-                                            <td>{{ $dossie->ds_dossie_destino }}</td>
-                                            <td>{{ $dossie->no_tipo_documento_dossie}}</td>
-
-                                            <td>{{ $dossie->no_status_solicitacao }}</td>
+                                            <td>{{ $dossie->destino?->ds_dossie_destino }}</td>
+                                            <td>{{ $dossie->tipoDocumento?->no_tipo_documento_dossie }}</td>
+                                            <td>{{ format_date($dossie->dt_create)}}</td>
+                                            <td>{{ $dossie->tipoDossie?->no_tipo_dossie }}</td>
+                                            <td>{{ $dossie->status?->no_status }}</td>
 
                                             <td>
                                                 @can('Module.update')
-                                                <a href="{{ route('ted.edit', $dossie->sq_dossie) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
-                                                    <i class="flaticon-edit"></i>
-                                                </a>
+                                                    <a href="{{ route('dossie.edit', $dossie->sq_dossie) }}"
+                                                       class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                        <i class="flaticon-edit"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Module.list')
-                                                <a href="{{ route('ted.show', $dossie->sq_dossie) }}"
-                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
-                                                    <i class="flaticon2-search-1"></i>
-                                                </a>
+                                                    <a href="{{ route('dossie.show', $dossie->sq_dossie) }}"
+                                                       class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
+                                                        <i class="flaticon2-search-1"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Module.delete')
-                                                    <form action="{{ route('ted.destroy', $dossie->sq_dossie) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('dossie.destroy', $dossie->sq_dossie) }}"
+                                                          method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
+                                                        <button
+                                                            class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
                                                             <i class="flaticon2-trash"></i>
                                                         </button>
                                                     </form>
@@ -116,96 +135,95 @@
             </div>
         </div>
     </div>
-        <div class="modal fade" id="visualizar" tabindex="-1" role="dialog">
-            <div class="modal-dialog modal-xl" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Module</h5>
-                        <button type="button" class="close" data-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body" id="visualizar-body">
-                        <!-- Conteúdo será carregado aqui -->
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
-
-                    </div>
+    <div class="modal fade" id="visualizar" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Module</h5>
+                    <button type="button" class="close" data-dismiss="modal"></button>
                 </div>
+                <div class="modal-body" id="visualizar-body">
+                    <!-- Conteúdo será carregado aqui -->
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Fechar</button>
 
+                </div>
             </div>
+
         </div>
+    </div>
 
-    @endsection
-    @section('scripts')
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <script>
+@endsection
+@section('scripts')
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
 
 
-            $(document).on('click', '.visualizar-modulo', function (e) {
+        $(document).on('click', '.visualizar-modulo', function (e) {
+            e.preventDefault();
+
+            const url = $(this).attr('href');
+            const modal = $('#visualizar');
+            const modalBody = $('#visualizar-body');
+
+            // Mostra o modal e indica que está carregando
+            modal.modal('show');
+            modalBody.html('<div class="text-center p-3">Carregando...</div>');
+
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function (html) {
+                    modalBody.html(html);
+                },
+                error: function () {
+                    modalBody.html('<div class="text-danger p-3">Erro ao carregar os dados.</div>');
+                }
+            });
+        });
+
+        // Confirmação de exclusão
+        document.querySelectorAll('.btn-excluir').forEach((btn) => {
+            btn.addEventListener('click', function (e) {
                 e.preventDefault();
 
-                const url = $(this).attr('href');
-                const modal = $('#visualizar');
-                const modalBody = $('#visualizar-body');
+                const form = this.closest('form');
 
-                // Mostra o modal e indica que está carregando
-                modal.modal('show');
-                modalBody.html('<div class="text-center p-3">Carregando...</div>');
-
-                $.ajax({
-                    url: url,
-                    type: 'GET',
-                    success: function (html) {
-                        modalBody.html(html);
-                    },
-                    error: function () {
-                        modalBody.html('<div class="text-danger p-3">Erro ao carregar os dados.</div>');
+                Swal.fire({
+                    title: "Deseja excluir o Module?",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Excluir!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        form.submit();
                     }
                 });
             });
-
-            // Confirmação de exclusão
-            document.querySelectorAll('.btn-excluir').forEach((btn) => {
-                btn.addEventListener('click', function (e) {
-                    e.preventDefault();
-
-                    const form = this.closest('form');
-
-                    Swal.fire({
-                        title: "Deseja excluir o Module?",
-                        icon: "warning",
-                        showCancelButton: true,
-                        confirmButtonColor: "#3085d6",
-                        cancelButtonColor: "#d33",
-                        confirmButtonText: "Excluir!"
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            form.submit();
-                        }
-                    });
-                });
-            });
+        });
 
 
-
-            @if(session('success'))
-            Swal.fire({
-                position: "top-end",
-                icon: "success",
-                title: '{{ session('success') }}',
-                showConfirmButton: false,
-                timer: 3500
-            });
-            @endif
-            @if(session('error'))
-            Swal.fire({
-                position: "top-end",
-                title:  '{{ session('error') }}',
-                timer: 2500,
-                timerProgressBar: true,
-                showConfirmButton: false
-            });
-            @endif
-        </script>
-    @endsection
+        @if(session('success'))
+        Swal.fire({
+            position: "top-end",
+            icon: "success",
+            title: '{{ session('success') }}',
+            showConfirmButton: false,
+            timer: 3500
+        });
+        @endif
+        @if(session('error'))
+        Swal.fire({
+            position: "top-end",
+            title: '{{ session('error') }}',
+            timer: 2500,
+            timerProgressBar: true,
+            showConfirmButton: false
+        });
+        @endif
+    </script>
+@endsection
 

@@ -117,7 +117,7 @@ Route::prefix('dossie')->group(function () {
     Route::get('{id}', [DossieController::class, 'show'])->name('dossie.show');
     Route::post('/', [DossieController::class, 'store'])->name('dossie.store');
     Route::get('/edit/{id}', [DossieController::class, 'edit'])->name('dossie.edit');
-    Route::put('{id}', [DossieController::class, 'update'])->name('dossie.update');
+    Route::put('/{sq_dossie}', [DossieController::class, 'update'])->name('dossie.update');
     Route::delete('{id}', [DossieController::class, 'destroy'])->name('dossie.destroy');
     Route::post('/atualizar/{cd_ted}', [DossieController::class, 'atualizar'])->name('dossie.atualizar');
 });

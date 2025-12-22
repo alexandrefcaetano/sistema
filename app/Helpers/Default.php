@@ -105,7 +105,7 @@ function ativadorLinks( array $routes)
     if(is_array($routes)){
         foreach ($routes as $ms) {
             if (request()->routeIs($ms)) {
-                return "kt-menu__item--open kt-menu__item--here";
+                return "active open";
             }
         }
     }
@@ -261,4 +261,36 @@ function has_ability($ability)
     }
     return false;
 }
+
+
+if (!function_exists('cpf_cnpj')) {
+    function cpf_cnpj(?string $valor): ?string
+    {
+        if (!$valor) {
+            return null;
+        }
+
+        $valor = preg_replace('/\D/', '', $valor);
+
+        if (strlen($valor) === 11) {
+            // CPF
+            return substr($valor, 0, 3) . '.' .
+                substr($valor, 3, 3) . '.' .
+                substr($valor, 6, 3) . '-' .
+                substr($valor, 9, 2);
+        }
+
+        if (strlen($valor) === 14) {
+            // CNPJ
+            return substr($valor, 0, 2) . '.' .
+                substr($valor, 2, 3) . '.' .
+                substr($valor, 5, 3) . '/' .
+                substr($valor, 8, 4) . '-' .
+                substr($valor, 12, 2);
+        }
+
+        return $valor;
+    }
+}
+
 

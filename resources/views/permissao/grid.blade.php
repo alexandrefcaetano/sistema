@@ -1,6 +1,6 @@
 @
 
-@extends('layout/main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -24,7 +24,8 @@
                 <div class="alert alert-light alert-elevate" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
                     <div class="alert-text">
-                        The Metronic Datatable component supports initialization from HTML table. It also defines the schema model of the data source. In addition to the visualization, the Datatable
+                        The Metronic Datatable component supports initialization from HTML table. It also defines the
+                        schema model of the data source. In addition to the visualization, the Datatable
                         provides built-in support for operations over data such
                         as sorting, filtering and paging performed in user browser(frontend).
                     </div>
@@ -43,10 +44,11 @@
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
                                     @can('Permissões.create')
-                                    <a href="{{ route('permissao.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                        <i class="la la-plus"></i>
-                                        Nova Permissão
-                                    </a>
+                                        <a href="{{ route('permissao.create') }}"
+                                           class="btn btn-brand btn-elevate btn-icon-sm">
+                                            <i class="la la-plus"></i>
+                                            Nova Permissão
+                                        </a>
                                     @endcan
                                 </div>
                             </div>
@@ -58,14 +60,16 @@
                                 <form method="GET" class="mb-3">
                                     <div class="form-inline">
                                         <label for="per_page" class="mr-2">Registros por página:</label>
-                                        <select name="per_page" id="per_page" class="form-control form-control-sm" onchange="this.form.submit()">
+                                        <select name="per_page" id="per_page" class="form-control form-control-sm"
+                                                onchange="this.form.submit()">
                                             @foreach ([10, 20, 50, 100] as $size)
                                                 <option value="{{ $size }}" {{ $perPage == $size ? 'selected' : '' }}>{{ $size }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </form>
-                                <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap" id="kt_table_1">
+                                <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap"
+                                       id="kt_table_1">
                                     <thead>
                                     <tr>
                                         <th>ID</th>
@@ -84,35 +88,38 @@
                                             <td>{{ $role->getStatusLabel() }}</td>
                                             <td>
                                                 @can('Permissões.update')
-                                                <a href="{{ route('permissao.edit', $role->id) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
-                                                    <i class="flaticon-edit"></i>
-                                                </a>
+                                                    <a href="{{ route('permissao.edit', $role->id) }}"
+                                                       class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                        <i class="flaticon-edit"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Permissões.list')
-                                                <a href="{{ route('permissao.show', $role->id) }}"
-                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-user">
-                                                    <i class="flaticon2-search-1"></i>
-                                                </a>
-                                                    @endcan
-                                                    @can('Permissões.delete')
-                                                        @if($role->excluido)
-                                                            <form action="{{ route('permissao.restore', $role->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                @method('PUT')
-                                                                <button class="btn btn-outline-success btn-sm btn-icon btn-icon-md btn-restore">
-                                                                    <i class="flaticon2-checkmark"></i>
-                                                                </button>
-                                                            </form>
-                                                        @else
-                                                            <form action="{{ route('permissao.destroy', $role->id) }}" method="POST" class="d-inline">
-                                                                @csrf
-                                                                @method('DELETE')
-                                                                <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
-                                                                    <i class="flaticon2-trash"></i>
-                                                                </button>
-                                                            </form>
-                                                        @endif
-                                                    @endcan
+                                                    <a href="{{ route('permissao.show', $role->id) }}"
+                                                       class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-user">
+                                                        <i class="flaticon2-search-1"></i>
+                                                    </a>
+                                                @endcan
+                                                @can('Permissões.delete')
+                                                    @if($role->excluido)
+                                                        <form action="{{ route('permissao.restore', $role->id) }}"
+                                                              method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button class="btn btn-outline-success btn-sm btn-icon btn-icon-md btn-restore">
+                                                                <i class="flaticon2-checkmark"></i>
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <form action="{{ route('permissao.destroy', $role->id) }}"
+                                                              method="POST" class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
+                                                                <i class="flaticon2-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    @endif
+                                                @endcan
                                             </td>
                                         </tr>
                                     @empty
@@ -152,10 +159,6 @@
 
         </div>
     </div>
-
-
-
-
 
 @endsection
 @section('scripts')
@@ -229,8 +232,6 @@
         });
 
 
-
-
         @if(session('success'))
         Swal.fire({
             position: "top-end",
@@ -243,7 +244,7 @@
         @if(session('error'))
         Swal.fire({
             position: "top-end",
-            title:  '{{ session('error') }}',
+            title: '{{ session('error') }}',
             timer: 2500,
             timerProgressBar: true,
             showConfirmButton: false

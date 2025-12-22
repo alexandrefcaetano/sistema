@@ -6,11 +6,14 @@ use App\Models\Solicitacao;
 use App\Models\TedValor;
 use App\Repository\DossieRepository;
 use Illuminate\Support\Facades\DB;
+use App\Services\AnexoService;
 
 class DossieService
 {
     public function __construct(
-        private DossieRepository $repo
+        private DossieRepository $repo,
+        private AnexoService $anexoService,
+        private Solicitacao $solicitacao,
     ) {}
 
 
@@ -44,7 +47,68 @@ class DossieService
      */
     public function create(array $data)
     {
-        return $this->repo->create($data);
+
+        DB::beginTransaction();
+
+        try {
+            /** ---------------------------------------------------
+             * 1. Criar a Solicitação
+             * ---------------------------------------------------*/
+            $solicitacao = $this->solicitacao->create([
+                'cd_aplicacao' => 1
+            ]);
+
+            /** ---------------------------------------------------
+             * 2. Criar complemento (se houver)
+             * ---------------------------------------------------*/
+            if (!empty($data['ds_obs'])) {
+                $solicitacao->complementos()->create([
+                    'cd_solicitacao' => $solicitacao->cd_solicitacao,
+                    'cd_status'      => 1,
+                    'nr_matricula'   => user()->nr_matricula,
+                    'ds_obs'         => $data['ds_obs'],
+                    'dt_complemento' => now(),
+                ]);
+            }
+
+            /** ---------------------------------------------------
+             * 3. Criar DISSIE vinculado à solicitação
+             * ---------------------------------------------------*/
+            $dossie = $this->repo->create([
+                'cd_solicitacao'    => $solicitacao->cd_solicitacao,
+                'cd_status'         => 1,
+                'cd_dependencia'    => $data['cd_dependencia'],
+                'cd_dossie_destino' => $data['cd_dossie_destino'],
+                'cd_produto_conta'  => $data['cd_produto_conta'],
+                'cd_especie_conta'  => $data['cd_especie_conta'],
+                'cd_tipo_documento_dossie'=> $data['cd_tipo_documento_dossie'],
+                'cd_tipo_dossie'    => $data['cd_tipo_dossie'],
+
+                'no_unidade'        => $data['no_unidade'],
+                'nr_telefone'       => $data['nr_telefone'] ?? null,
+                'dn_cpf_cnpj'       => $data['dn_cpf_cnpj'],
+                'ds_chave_negocio'  => $data['ds_chave_negocio'] ?? null,
+                'nr_conta'          => $data['nr_conta'],
+                'dt_emissao'        => $data['dt_emissao'],
+            ]);
+
+            /** ---------------------------------------------------
+             * 4. Processar ANEXOS
+             * ---------------------------------------------------*/
+            $this->anexoService->salvar(
+                arquivos: $data['anexo'],
+                cdSolicitacao: $solicitacao->cd_solicitacao,
+                descricoes: $data['descricao_anexo'] ?? []
+            );
+
+
+        DB::commit();
+        return $dossie;
+
+       } catch (\Throwable $e) {
+          DB::rollBack();
+          throw $e;
+        }
     }
 
     /**

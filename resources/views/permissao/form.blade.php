@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -35,8 +35,8 @@
 
             <!--begin::Form-->
             <form
-                action="{{ isset($perm) ? route('permissao.update', ['id' => $perm->id]) : route('permissao.store') }}"
-                method="POST" class="kt-form kt-form--label-right form" >
+                    action="{{ isset($perm) ? route('permissao.update', ['id' => $perm->id]) : route('permissao.store') }}"
+                    method="POST" class="kt-form kt-form--label-right form">
                 @csrf
                 @if(isset($perm))
                     @method('PUT')
@@ -76,8 +76,12 @@
                                 <label class="col-lg-3 col-form-label">Status:</label>
                                 <div class="col-lg-6">
                                     <select name="status" class="form-control" required>
-                                        <option value="AT" {{ old('status', $perm->status ?? '') == 'AT' ? 'selected' : '' }}>Ativo</option>
-                                        <option value="IN" {{ old('status', $perm->status ?? '') == 'IN' ? 'selected' : '' }}>Inativo</option>
+                                        <option value="AT" {{ old('status', $perm->status ?? '') == 'AT' ? 'selected' : '' }}>
+                                            Ativo
+                                        </option>
+                                        <option value="IN" {{ old('status', $perm->status ?? '') == 'IN' ? 'selected' : '' }}>
+                                            Inativo
+                                        </option>
                                     </select>
                                 </div>
                             </div>
@@ -85,7 +89,8 @@
                             <div class="form-group row">
                                 <label for="example-text-input" class="col-3 col-form-label">Descricao:</label>
                                 <div class="col-6">
-                                    <textarea class="form-control"  rows="3" name="description">{{ old('name', $perm->description ?? '') }}</textarea>
+                                    <textarea class="form-control" rows="3"
+                                              name="description">{{ old('name', $perm->description ?? '') }}</textarea>
                                     <span class="form-text text-muted">We'll never share your email with anyone else</span>
                                 </div>
                             </div>
@@ -108,7 +113,7 @@
                                                         <input type="checkbox"
                                                                name="abilities[]"
                                                                value="{{ $ability->id }}"
-                                                            {{ isset($perm) && $perm->abilities->contains($ability->id) ? 'checked' : '' }}>
+                                                                {{ isset($perm) && $perm->abilities->contains($ability->id) ? 'checked' : '' }}>
                                                         {{ ucfirst($ability->display_name ?? $ability->name) }}
                                                         <span></span>
                                                     </label>
@@ -116,7 +121,7 @@
                                             </div>
                                         </td>
                                     </tr>
-                            @endforeach
+                                @endforeach
                             </table>
                         </div>
                     </div>

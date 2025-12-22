@@ -1,7 +1,4 @@
-
-
-
-@extends('layout/main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -33,10 +30,10 @@
             <!--begin::Form-->
 
             <form
-                action="{{ $user->id ? route('usuario.update', $user->id) : route('usuario.store') }}"
-                method="POST"
-                class="kt-form kt-form--label-right form"
-                data-form-contato="contato"
+                    action="{{ $user->id ? route('usuario.update', $user->id) : route('usuario.store') }}"
+                    method="POST"
+                    class="kt-form kt-form--label-right form"
+                    data-form-contato="contato"
             >
                 @csrf
                 @if(isset($user))
@@ -57,14 +54,16 @@
                     <div class="form-group row">
                         <div class="col-lg-6">
                             <label>Nome Completo:</label>
-                            <input type="text" name="name" class="form-control" placeholder="Nome Completo" value="{{ old('name', $user->name ?? '') }}">
+                            <input type="text" name="name" class="form-control" placeholder="Nome Completo"
+                                   value="{{ old('name', $user->name ?? '') }}">
                             <span class="form-text text-muted">Entre com o Nome Completo</span>
                         </div>
 
 
                         <div class="col-lg-4">
                             <label class="">Email:</label>
-                            <input type="text" name="email" class="form-control"  placeholder="Digite seu Email" value="{{ old('email', $user->email ?? '') }}" />
+                            <input type="text" name="email" class="form-control" placeholder="Digite seu Email"
+                                   value="{{ old('email', $user->email ?? '') }}"/>
                             <span class="form-text text-muted">Entre com o email</span>
                         </div>
 
@@ -73,41 +72,56 @@
                             <label>status:</label>
                             <div class="form-group">
                                 @if(!$user->exists)
-                                    <input type="text"  class="form-control" disabled  value="Bloqueado">
+                                    <input type="text" class="form-control" disabled value="Bloqueado">
                                 @else
-                                <select class="form-control" id="status" name="status" {{ $user->exists ? '' : 'disabled' }}>
-                                    <option value="AT" {{ old('status', $user->status ?? '') == 'AT' ? 'selected' : '' }}>Ativo</option>
-                                    <option value="IN" {{ old('status', $user->status ?? '') == 'IN' ? 'selected' : '' }}>Inativo</option>
-                                    <option value="BL" {{ old('status', $user->status ?? '') == 'BL' ? 'selected' : '' }}>Bloqueado</option>
-                                    <option value="CA" {{ old('status', $user->status ?? '') == 'CA' ? 'selected' : '' }}>Cancelado</option>
-                                </select>
-                                <span class="form-text text-muted">Selecione o Status</span>
+                                    <select class="form-control" id="status"
+                                            name="status" {{ $user->exists ? '' : 'disabled' }}>
+                                        <option value="AT" {{ old('status', $user->status ?? '') == 'AT' ? 'selected' : '' }}>
+                                            Ativo
+                                        </option>
+                                        <option value="IN" {{ old('status', $user->status ?? '') == 'IN' ? 'selected' : '' }}>
+                                            Inativo
+                                        </option>
+                                        <option value="BL" {{ old('status', $user->status ?? '') == 'BL' ? 'selected' : '' }}>
+                                            Bloqueado
+                                        </option>
+                                        <option value="CA" {{ old('status', $user->status ?? '') == 'CA' ? 'selected' : '' }}>
+                                            Cancelado
+                                        </option>
+                                    </select>
+                                    <span class="form-text text-muted">Selecione o Status</span>
                                 @endif
                             </div>
                         </div>
-
 
 
                     </div>
                     <div class="form-group row">
                         <div class="col-lg-4">
                             <label>Cpf:</label>
-                            <input type="text" name="cpf" class="form-control" id="cpf" placeholder="CPF" value="{{ old('cpf', $user->cpf ?? '') }}">
+                            <input type="text" name="cpf" class="form-control" id="cpf" placeholder="CPF"
+                                   value="{{ old('cpf', $user->cpf ?? '') }}">
                             <span class="form-text text-muted">Entre com o seu CPF</span>
                         </div>
                         <div class="col-lg-4">
                             <label class="">Data Nascimento:</label>
-                            <input type="text" name="data_nascimento" class="form-control" id="kt_datepicker_1" value="{{ old('data_nascimento', $user->data_nascimento ?? '') }}" readonly placeholder="Select date" />
+                            <input type="text" name="data_nascimento" class="form-control" id="kt_datepicker_1"
+                                   value="{{ old('data_nascimento', $user->data_nascimento ?? '') }}" readonly
+                                   placeholder="Select date"/>
                         </div>
                         <div class="col-lg-4">
                             <label>Sexo:</label>
                             <div class="form-group">
-                                    <select class="form-control" id="sexo" name="sexo">
-                                        <option value="">Selecione</option>
-                                        <option value="MA" {{ old('sexo', $user->sexo ?? '') == 'MA' ? 'selected' : '' }}>Masculino</option>
-                                        <option value="FE" {{ old('sexo', $user->sexo ?? '') == 'FE' ? 'selected' : '' }}>Feminico</option>
-                                    </select>
-                                    <span class="form-text text-muted">Entre com o seu Sexo</span>
+                                <select class="form-control" id="sexo" name="sexo">
+                                    <option value="">Selecione</option>
+                                    <option value="MA" {{ old('sexo', $user->sexo ?? '') == 'MA' ? 'selected' : '' }}>
+                                        Masculino
+                                    </option>
+                                    <option value="FE" {{ old('sexo', $user->sexo ?? '') == 'FE' ? 'selected' : '' }}>
+                                        Feminico
+                                    </option>
+                                </select>
+                                <span class="form-text text-muted">Entre com o seu Sexo</span>
 
                             </div>
                         </div>
@@ -123,10 +137,10 @@
 
                                 @foreach($roles as $role)
                                     <option value="{{ $role->id }}"
-                                        {{ in_array(
-                                            $role->id,
-                                            (array) old('roles', $user->roles->pluck('id')->toArray())
-                                        ) ? 'selected' : '' }}>
+                                            {{ in_array(
+                                                $role->id,
+                                                (array) old('roles', $user->roles->pluck('id')->toArray())
+                                            ) ? 'selected' : '' }}>
                                         {{ $role->name }}
                                     </option>
                                 @endforeach
@@ -136,8 +150,6 @@
                     </div>
 
 
-
-
                     <div class="form-group row">
                         {{-- Campo Senha --}}
                         <div class="col-lg-4">
@@ -145,7 +157,7 @@
 
                             <input type="password" class="form-control" name="password"
                                    value="{{ old('password', $user->exists ? '********' : 'BRB@2025') }}"
-                                {{ $user->exists ? '' : 'disabled' }}
+                                    {{ $user->exists ? '' : 'disabled' }}
                             >
 
                             @unless($user->exists)
@@ -174,7 +186,8 @@
                                     </label>
                                 @else
                                     {{-- Edição: habilitado --}}
-                                    <input type="checkbox" class="form-check-input" id="redefinir_senha" name="redefinir_senha" value="1">
+                                    <input type="checkbox" class="form-check-input" id="redefinir_senha"
+                                           name="redefinir_senha" value="1">
                                     <label class="form-check-label" for="redefinir_senha">
                                         Restaurar senha padrão ({{ \App\Models\Usuario::SENHA_PADRAO }})
                                     </label>
@@ -193,25 +206,29 @@
                     </div>
                     <div class="kt-separator kt-separator--border-dashed kt-separator--space-lg kt-separator--portlet-fit"></div>
                     <div class="form-group row">
-                            <div class="col-md-8" style="margin-bottom: 8px;">
-                                <a href="javascript:abrirModalContato()" class="btn btn-info"><i class="fa fa-plus-square-o"></i> Incluir Contato</a>
-                            </div>
-                            <div class="col-md-8">
-                                <table data-toggle="table" class="table table-bordered table-hover table-contato" data-unique-id="id">
-                                    <thead class="thead-light">
-                                    <tr>
-                                        <th data-field="tipo" data-align="center">Tipo</th>
-                                        <th data-field="descricao">Contato</th>
-                                        <th data-field="flg_principal" data-align="center" data-formatter="formatPrincipal">Principal</th>
-                                        <th data-formatter="formatAcao" data-align="center">Ações</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    </tbody>
-                                    <input type="hidden" name="contato" class="contato" value=""/>
-                                </table>
-                            </div>
+                        <div class="col-md-8" style="margin-bottom: 8px;">
+                            <a href="javascript:abrirModalContato()" class="btn btn-info"><i
+                                        class="fa fa-plus-square-o"></i> Incluir Contato</a>
                         </div>
+                        <div class="col-md-8">
+                            <table data-toggle="table" class="table table-bordered table-hover table-contato"
+                                   data-unique-id="id">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th data-field="tipo" data-align="center">Tipo</th>
+                                    <th data-field="descricao">Contato</th>
+                                    <th data-field="flg_principal" data-align="center" data-formatter="formatPrincipal">
+                                        Principal
+                                    </th>
+                                    <th data-formatter="formatAcao" data-align="center">Ações</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                <input type="hidden" name="contato" class="contato" value=""/>
+                            </table>
+                        </div>
+                    </div>
 
                 </div>
 
@@ -220,7 +237,8 @@
                         <div class="row">
                             <div class="col-lg-4"></div>
                             <div class="col-lg-8">
-                                <button type="submit" class="btn btn-primary">{{ isset($user) ? 'Atualizar' : 'Salvar' }}</button>
+                                <button type="submit"
+                                        class="btn btn-primary">{{ isset($user) ? 'Atualizar' : 'Salvar' }}</button>
                                 <a href="{{ route('usuario.index') }}" class="btn btn-danger"> Voltar </a>
                             </div>
                         </div>
@@ -247,13 +265,17 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/select2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/select2.js') }}"
+            type="text/javascript"></script>
 
     <script src="{{ asset('js/modal-contato.js') }}"></script>
 
-    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/bootstrap-datepicker.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/input-mask.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('assets/app/custom/general/components/extended/sweetalert2.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/bootstrap-datepicker.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/app/custom/general/crud/forms/widgets/input-mask.js') }}"
+            type="text/javascript"></script>
+    <script src="{{ asset('assets/app/custom/general/components/extended/sweetalert2.js') }}"
+            type="text/javascript"></script>
 
 @endsection
 

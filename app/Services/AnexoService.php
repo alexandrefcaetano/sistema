@@ -1,20 +1,44 @@
 <?php
 
-
 namespace App\Services;
 
-
-use App\Repository\AnexoRepository;
-
+use App\Models\Anexo;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 
 class AnexoService
 {
-    public function __construct(private AnexoRepository $repo){}
+    public function salvar(
+        array $arquivos,
+        int $cdSolicitacao,
+        ?array $descricoes = null,
+        array $extra = []
+    ): void {
+        foreach ($arquivos as $index => $file) {
 
+            if (!$file instanceof UploadedFile) {
+                continue;
+            }
 
-    public function list($perPage=15){ return $this->repo->paginate($perPage); }
-    public function get($id){ return $this->repo->find($id); }
-    public function store($d){ return $this->repo->create($d); }
-    public function update($id,$d){ return $this->repo->update($id,$d); }
-    public function destroy($id){ return $this->repo->delete($id); }
+            $nomeOriginal = $file->getClientOriginalName();
+
+            $path = "dossies/{$cdSolicitacao}/anexos";
+
+            $arquivoSalvo = $file->storeAs(
+                $path,
+                uniqid() . '_' . $nomeOriginal
+            );
+
+            Anexo::create(array_merge([
+                'cd_solicitacao'     => $cdSolicitacao,
+                'ds_arquivo'         => $descricoes[$index] ?? null,
+                'no_arquivo'         => $nomeOriginal,
+                'nr_tamanho_arquivo' => $file->getSize(),
+                'st_aprovacao'       => 'P',
+                'dt_arquivo'         => now(),
+                'dt_insercao'        => now(),
+                'nr_matricula'       => user()->nr_matricula,
+            ], $extra));
+        }
+    }
 }

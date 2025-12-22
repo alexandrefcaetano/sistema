@@ -1,4 +1,4 @@
-@extends('layout/main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -17,6 +17,8 @@
 
         <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
             <div class="kt-content  kt-grid__item kt-grid__item--fluid" id="kt_content">
+
+
                 <div class="kt-portlet kt-portlet--mobile">
                     <div class="kt-portlet__head kt-portlet__head--lg">
                         <div class="kt-portlet__head-label">
@@ -30,12 +32,13 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
-{{--                                    @can('Module.create')--}}
-                                    <a href="{{ route('aplicacoas.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
+                                    {{--                                    @can('Module.create')--}}
+                                    <a href="{{ route('aplicacoas.create') }}"
+                                       class="btn btn-brand btn-elevate btn-icon-sm">
                                         <i class="la la-plus"></i>
                                         Nova Aplicaçao
                                     </a>
-{{--                                    @endcan--}}
+                                    {{--                                    @endcan--}}
                                 </div>
                             </div>
                         </div>
@@ -48,7 +51,7 @@
                                     <tr>
                                         <th>Codigo</th>
                                         <th>Aplicação</th>
-                                        <th>Codigo </th>
+                                        <th>Codigo</th>
                                         <th>Tipo</th>
                                         <th>Ações</th>
                                     </tr>
@@ -70,21 +73,23 @@
 
                                             <td>
                                                 @can('Module.update')
-                                                <a href="{{ route('aplicacoas.edit', $aplicacao->cd_aplicacao) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
-                                                    <i class="flaticon-edit"></i>
-                                                </a>
+                                                    <a href="{{ route('aplicacoas.edit', $aplicacao->cd_aplicacao) }}"
+                                                       class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                        <i class="flaticon-edit"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Module.list')
-{{--                                                <a href="{{ route('aplicacoas.show', $aplicacao->cd_aplicacao) }}"--}}
-{{--                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">--}}
-{{--                                                    <i class="flaticon2-search-1"></i>--}}
-{{--                                                </a>--}}
+                                                    {{--                                                <a href="{{ route('aplicacoas.show', $aplicacao->cd_aplicacao) }}"--}}
+                                                    {{--                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">--}}
+                                                    {{--                                                    <i class="flaticon2-search-1"></i>--}}
+                                                    {{--                                                </a>--}}
                                                 @endcan
                                                 @can('Module.delete')
-                                                    <form action="{{ route('aplicacoas.delete', $aplicacao->cd_aplicacao) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('aplicacoas.delete', $aplicacao->cd_aplicacao) }}"
+                                                          method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
+                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
                                                             <i class="flaticon2-trash"></i>
                                                         </button>
                                                     </form>
@@ -122,10 +127,6 @@
 
         </div>
     </div>
-
-
-
-
 
 @endsection
 @section('scripts')
@@ -179,7 +180,6 @@
         });
 
 
-
         @if(session('success'))
         Swal.fire({
             position: "top-end",
@@ -192,7 +192,7 @@
         @if(session('error'))
         Swal.fire({
             position: "top-end",
-            title:  '{{ session('error') }}',
+            title: '{{ session('error') }}',
             timer: 2500,
             timerProgressBar: true,
             showConfirmButton: false

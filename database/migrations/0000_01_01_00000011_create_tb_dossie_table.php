@@ -17,6 +17,13 @@ return new class extends Migration {
             $table->smallInteger('cd_produto_conta')->nullable();
             $table->smallInteger('cd_especie_conta')->nullable();
             $table->smallInteger('cd_tipo_dossie')->nullable();
+
+            $table->smallInteger('cd_dependencia')->nullable();
+            $table->string('no_unidade', 255)->nullable();
+            $table->timestamp('dt_emissao')->nullable();
+            $table->string('nr_telefone', 30)->nullable();
+
+
             $table->bigInteger('cd_status');
             $table->string('dn_cpf_cnpj', 14)->nullable();
             $table->string('ds_motivo_abertura', 200)->nullable();

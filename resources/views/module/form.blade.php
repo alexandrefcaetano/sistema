@@ -1,4 +1,4 @@
-@extends('layout.main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -35,8 +35,8 @@
 
             <!--begin::Form-->
             <form
-                action="{{ isset($module) ? route('module.update', ['id' => $module->id]) : route('module.store') }}"
-                method="POST" class="kt-form kt-form--label-right form" >
+                    action="{{ isset($module) ? route('module.update', ['id' => $module->id]) : route('module.store') }}"
+                    method="POST" class="kt-form kt-form--label-right form">
                 @csrf
                 @if(isset($module))
                     @method('PUT')
@@ -96,7 +96,8 @@
                                             <th>Nome (slug)</th>
                                             <th>Nome exibido</th>
                                             <th style="width: 50px;">
-                                                <button type="button" class="btn btn-icon btn-success" id="add-ability"><i class="fa fa-plus"></i></button>
+                                                <button type="button" class="btn btn-icon btn-success" id="add-ability">
+                                                    <i class="fa fa-plus"></i></button>
                                             </th>
                                         </tr>
                                         </thead>
@@ -105,15 +106,19 @@
                                             @foreach($module->abilities as $i => $ability)
                                                 <tr>
                                                     <td>
-                                                        <input type="text" name="abilities[{{ $i }}][name]" class="form-control"
-                                                               value="{{ old("abilities.$i.name", $ability->name) }}" required>
+                                                        <input type="text" name="abilities[{{ $i }}][name]"
+                                                               class="form-control"
+                                                               value="{{ old("abilities.$i.name", $ability->name) }}"
+                                                               required>
                                                     </td>
                                                     <td>
-                                                        <input type="text" name="abilities[{{ $i }}][display_name]" class="form-control"
+                                                        <input type="text" name="abilities[{{ $i }}][display_name]"
+                                                               class="form-control"
                                                                value="{{ old("abilities.$i.display_name", $ability->display_name) }}">
                                                     </td>
                                                     <td>
-                                                        <button type="button" class="btn btn-icon btn-danger remove-ability">
+                                                        <button type="button"
+                                                                class="btn btn-icon btn-danger remove-ability">
                                                             <i class="la la-trash"></i>
                                                         </button>
                                                     </td>
@@ -121,9 +126,15 @@
                                             @endforeach
                                         @else
                                             <tr>
-                                                <td><input type="text" name="abilities[0][name]" class="form-control" required></td>
-                                                <td><input type="text" name="abilities[0][display_name]" class="form-control"></td>
-                                                <td><button type="button" class="btn btn-icon btn-danger remove-ability"><i class="la la-trash"></i></button></td>
+                                                <td><input type="text" name="abilities[0][name]" class="form-control"
+                                                           required></td>
+                                                <td><input type="text" name="abilities[0][display_name]"
+                                                           class="form-control"></td>
+                                                <td>
+                                                    <button type="button"
+                                                            class="btn btn-icon btn-danger remove-ability"><i
+                                                                class="la la-trash"></i></button>
+                                                </td>
                                             </tr>
                                         @endif
                                         </tbody>
@@ -156,11 +167,11 @@
 @endsection
 @section('scripts')
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // Pega o número de linhas já existentes na tabela
             let index = document.querySelectorAll('#abilities-table tbody tr').length;
 
-            document.getElementById('add-ability').addEventListener('click', function() {
+            document.getElementById('add-ability').addEventListener('click', function () {
                 const tableBody = document.querySelector('#abilities-table tbody');
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
@@ -181,7 +192,7 @@
             });
 
             // Remover linha
-            document.querySelector('#abilities-table').addEventListener('click', function(e) {
+            document.querySelector('#abilities-table').addEventListener('click', function (e) {
                 if (e.target.closest('.remove-ability')) {
                     e.target.closest('tr').remove();
                 }

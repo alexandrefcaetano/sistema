@@ -1,4 +1,4 @@
-@extends('layout/main')
+@extends('layout._main')
 
 @section('content')
     <div class="kt-grid__item kt-grid__item--fluid kt-grid kt-grid--hor">
@@ -22,7 +22,8 @@
                 <div class="alert alert-light alert-elevate" role="alert">
                     <div class="alert-icon"><i class="flaticon-warning kt-font-brand"></i></div>
                     <div class="alert-text">
-                        The Metronic Datatable component supports initialization from HTML table. It also defines the schema model of the data source. In addition to the visualization, the Datatable
+                        The Metronic Datatable component supports initialization from HTML table. It also defines the
+                        schema model of the data source. In addition to the visualization, the Datatable
                         provides built-in support for operations over data such
                         as sorting, filtering and paging performed in user browser(frontend).
                     </div>
@@ -40,12 +41,13 @@
                         <div class="kt-portlet__head-toolbar">
                             <div class="kt-portlet__head-wrapper">
                                 <div class="kt-portlet__head-actions">
-{{--                                    {{ dd(array_keys(Gate::abilities())) }}--}}
+                                    {{--                                    {{ dd(array_keys(Gate::abilities())) }}--}}
                                     @can('Module.create')
-                                    <a href="{{ route('module.create') }}" class="btn btn-brand btn-elevate btn-icon-sm">
-                                        <i class="la la-plus"></i>
-                                        Novo Module
-                                    </a>
+                                        <a href="{{ route('module.create') }}"
+                                           class="btn btn-brand btn-elevate btn-icon-sm">
+                                            <i class="la la-plus"></i>
+                                            Novo Module
+                                        </a>
                                     @endcan
                                 </div>
                             </div>
@@ -57,14 +59,16 @@
                                 <form method="GET" class="mb-3">
                                     <div class="form-inline">
                                         <label for="per_page" class="mr-2">Registros por página:</label>
-                                        <select name="per_page" id="per_page" class="form-control form-control-sm" onchange="this.form.submit()">
+                                        <select name="per_page" id="per_page" class="form-control form-control-sm"
+                                                onchange="this.form.submit()">
                                             @foreach ([10, 20, 50, 100] as $size)
                                                 <option value="{{ $size }}" {{ $perPage == $size ? 'selected' : '' }}>{{ $size }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </form>
-                                <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap" id="kt_table_1">
+                                <table class="table table-striped- table-bordered table-hover table-checkable responsive no-wrap"
+                                       id="kt_table_1">
                                     <thead>
                                     <tr>
                                         <th>Módulo</th>
@@ -77,7 +81,8 @@
                                     <tbody>
                                     @foreach ($modules as $module)
                                         <tr>
-                                            <td>{{ $module->display_name }} <br><small class="text-muted">{{ $module->name }}</small></td>
+                                            <td>{{ $module->display_name }} <br><small
+                                                        class="text-muted">{{ $module->name }}</small></td>
                                             <td>
                                                 @foreach ($module->abilities as $a)
                                                     <span class="kt-badge kt-badge--dark kt-badge--inline kt-badge--pill kt-badge--rounded"><strong>{{ $a->display_name ?? $a->name }}</strong></span>
@@ -88,21 +93,23 @@
                                             <td>{{ $module->created_at }}</td>
                                             <td>
                                                 @can('Module.update')
-                                                <a href="{{ route('module.edit', $module->id) }}" class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
-                                                    <i class="flaticon-edit"></i>
-                                                </a>
+                                                    <a href="{{ route('module.edit', $module->id) }}"
+                                                       class="btn btn-outline-warning btn-sm btn-icon btn-icon-md">
+                                                        <i class="flaticon-edit"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Module.list')
-                                                <a href="{{ route('module.show', $module->id) }}"
-                                                   class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
-                                                    <i class="flaticon2-search-1"></i>
-                                                </a>
+                                                    <a href="{{ route('module.show', $module->id) }}"
+                                                       class="btn btn-outline-brand btn-sm btn-icon btn-icon-md visualizar-modulo">
+                                                        <i class="flaticon2-search-1"></i>
+                                                    </a>
                                                 @endcan
                                                 @can('Module.delete')
-                                                    <form action="{{ route('module.destroy', $module->id) }}" method="POST" class="d-inline">
+                                                    <form action="{{ route('module.destroy', $module->id) }}"
+                                                          method="POST" class="d-inline">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir" >
+                                                        <button class="btn btn-outline-danger btn-sm btn-icon btn-icon-md btn-excluir">
                                                             <i class="flaticon2-trash"></i>
                                                         </button>
                                                     </form>
@@ -143,10 +150,6 @@
 
         </div>
     </div>
-
-
-
-
 
 @endsection
 @section('scripts')
@@ -200,7 +203,6 @@
         });
 
 
-
         @if(session('success'))
         Swal.fire({
             position: "top-end",
@@ -213,7 +215,7 @@
         @if(session('error'))
         Swal.fire({
             position: "top-end",
-            title:  '{{ session('error') }}',
+            title: '{{ session('error') }}',
             timer: 2500,
             timerProgressBar: true,
             showConfirmButton: false

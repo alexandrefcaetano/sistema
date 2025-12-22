@@ -7,18 +7,18 @@ use Illuminate\Database\Eloquent\Model;
 
 class DossieDestino extends Model
 {
-    protected $table = 'TB_DOSSIE_DESTINO';
-    protected $primaryKey = 'CD_DOSSIE_DESTINO';
+    protected $table = 'tb_dossie_destino';
+    protected $primaryKey = 'cd_dossie_destino';
     public $timestamps = false;
 
     protected $fillable = [
-        'DS_DOSSIE_DESTINO',
-        'ST_ATIVO'
+        'ds_dossie_destino',
+        'st_ativo'
     ];
 
     public function dossiesContas()
     {
-        return $this->hasMany(Dossie::class, 'CD_DOSSIE_DESTINO');
+        return $this->hasMany(Dossie::class, 'cd_dossie_destino');
     }
 
 }

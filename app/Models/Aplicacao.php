@@ -22,10 +22,10 @@ class Aplicacao extends Model
     public function getStatusBadgeAttribute()
     {
         return match ($this->st_aplicacao) {
-            self::STATUS_ATIVO     => '<span class="badge bg-success">Ativo</span>',
-            self::STATUS_BLOQUEADO => '<span class="badge bg-warning text-dark">Bloqueado</span>',
-            self::STATUS_INATIVO   => '<span class="badge bg-danger">Inativo</span>',
-            default                => '<span class="badge bg-secondary">Desconhecido</span>',
+            self::STATUS_ATIVO     => '<span class="label label-success">Ativo</span>',
+            self::STATUS_BLOQUEADO => '<span class="label label-warning">Bloqueado</span>',
+            self::STATUS_INATIVO   => '<span class="label label-danger">Inativo</span>',
+            default                => '<span class="label label-default">Desconhecido</span>',
         };
     }
 
